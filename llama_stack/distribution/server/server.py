@@ -60,6 +60,7 @@ from llama_stack.providers.utils.telemetry.tracing import (
 
 from .auth import AuthenticationMiddleware
 from .endpoints import get_all_api_endpoints
+from .quota import QuotaMiddleware
 
 REPO_ROOT = Path(__file__).parent.parent.parent.parent
 
@@ -280,7 +281,18 @@ class TracingMiddleware:
             logger.debug(f"No matching endpoint found for path: {path}, falling back to FastAPI")
             return await self.app(scope, receive, send)
 
-        trace_context = await start_trace(trace_path, {"__location__": "server", "raw_path": path})
+        trace_attributes = {"__location__": "server", "raw_path": path}
+
+        # Extract W3C trace context headers and store as trace attributes
+        headers = dict(scope.get("headers", []))
+        traceparent = headers.get(b"traceparent", b"").decode()
+        if traceparent:
+            trace_attributes["traceparent"] = traceparent
+        tracestate = headers.get(b"tracestate", b"").decode()
+        if tracestate:
+            trace_attributes["tracestate"] = tracestate
+
+        trace_context = await start_trace(trace_path, trace_attributes)
 
         async def send_with_trace_id(message):
             if message["type"] == "http.response.start":
@@ -358,7 +370,6 @@ def main(args: argparse.Namespace | None = None):
         default=int(os.getenv("LLAMA_STACK_PORT", 8321)),
         help="Port to listen on",
     )
-    parser.add_argument("--disable-ipv6", action="store_true", help="Whether to disable IPv6 support")
     parser.add_argument(
         "--env",
         action="append",
@@ -370,14 +381,6 @@ def main(args: argparse.Namespace | None = None):
     # parsed from the command line
     if args is None:
         args = parser.parse_args()
-
-    # Check for deprecated argument usage
-    if "--yaml-config" in sys.argv:
-        warnings.warn(
-            "The '--yaml-config' argument is deprecated and will be removed in a future version. Use '--config' instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
 
     log_line = ""
     if args.config:
@@ -392,7 +395,7 @@ def main(args: argparse.Namespace | None = None):
             raise ValueError(f"Template {args.template} does not exist")
         log_line = f"Using template {args.template} config file: {config_file}"
     else:
-        raise ValueError("Either --yaml-config or --template must be provided")
+        raise ValueError("Either --config or --template must be provided")
 
     logger_config = None
     with open(config_file) as fp:
@@ -432,6 +435,35 @@ def main(args: argparse.Namespace | None = None):
     if config.server.auth:
         logger.info(f"Enabling authentication with provider: {config.server.auth.provider_type.value}")
         app.add_middleware(AuthenticationMiddleware, auth_config=config.server.auth)
+    else:
+        if config.server.quota:
+            quota = config.server.quota
+            logger.warning(
+                "Configured authenticated_max_requests (%d) but no auth is enabled; "
+                "falling back to anonymous_max_requests (%d) for all the requests",
+                quota.authenticated_max_requests,
+                quota.anonymous_max_requests,
+            )
+
+    if config.server.quota:
+        logger.info("Enabling quota middleware for authenticated and anonymous clients")
+
+        quota = config.server.quota
+        anonymous_max_requests = quota.anonymous_max_requests
+        # if auth is disabled, use the anonymous max requests
+        authenticated_max_requests = quota.authenticated_max_requests if config.server.auth else anonymous_max_requests
+
+        kv_config = quota.kvstore
+        window_map = {"day": 86400}
+        window_seconds = window_map[quota.period.value]
+
+        app.add_middleware(
+            QuotaMiddleware,
+            kv_config=kv_config,
+            anonymous_max_requests=anonymous_max_requests,
+            authenticated_max_requests=authenticated_max_requests,
+            window_seconds=window_seconds,
+        )
 
     try:
         impls = asyncio.run(construct_stack(config))
@@ -514,7 +546,7 @@ def main(args: argparse.Namespace | None = None):
         else:
             logger.info(f"HTTPS enabled with certificates:\n  Key: {keyfile}\n  Cert: {certfile}")
 
-    listen_host = ["::", "0.0.0.0"] if not config.server.disable_ipv6 else "0.0.0.0"
+    listen_host = config.server.host or ["::", "0.0.0.0"]
     logger.info(f"Listening on {listen_host}:{port}")
 
     uvicorn_config = {

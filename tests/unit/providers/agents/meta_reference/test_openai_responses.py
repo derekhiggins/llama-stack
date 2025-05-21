@@ -7,10 +7,18 @@
 from unittest.mock import AsyncMock, patch
 
 import pytest
+from openai.types.chat.chat_completion_chunk import (
+    ChatCompletionChunk,
+    Choice,
+    ChoiceDelta,
+    ChoiceDeltaToolCall,
+    ChoiceDeltaToolCallFunction,
+)
 
 from llama_stack.apis.agents.openai_responses import (
     OpenAIResponseInputItemList,
     OpenAIResponseInputMessageContentText,
+    OpenAIResponseInputToolFunction,
     OpenAIResponseInputToolWebSearch,
     OpenAIResponseMessage,
     OpenAIResponseObject,
@@ -168,6 +176,68 @@ async def test_create_openai_response_with_string_input_with_tools(openai_respon
 
 
 @pytest.mark.asyncio
+async def test_create_openai_response_with_tool_call_type_none(openai_responses_impl, mock_inference_api):
+    """Test creating an OpenAI response with a tool call response that has a type of None."""
+    # Setup
+    input_text = "How hot it is in San Francisco today?"
+    model = "meta-llama/Llama-3.1-8B-Instruct"
+
+    async def fake_stream():
+        yield ChatCompletionChunk(
+            id="123",
+            choices=[
+                Choice(
+                    index=0,
+                    delta=ChoiceDelta(
+                        tool_calls=[
+                            ChoiceDeltaToolCall(
+                                index=0,
+                                id="tc_123",
+                                function=ChoiceDeltaToolCallFunction(name="get_weather", arguments="{}"),
+                                type=None,
+                            )
+                        ]
+                    ),
+                ),
+            ],
+            created=1,
+            model=model,
+            object="chat.completion.chunk",
+        )
+
+    mock_inference_api.openai_chat_completion.return_value = fake_stream()
+
+    # Execute
+    result = await openai_responses_impl.create_openai_response(
+        input=input_text,
+        model=model,
+        stream=True,
+        temperature=0.1,
+        tools=[
+            OpenAIResponseInputToolFunction(
+                name="get_weather",
+                description="Get current temperature for a given location.",
+                parameters={
+                    "location": "string",
+                },
+            )
+        ],
+    )
+
+    # Verify
+    first_call = mock_inference_api.openai_chat_completion.call_args_list[0]
+    assert first_call.kwargs["messages"][0].content == input_text
+    assert first_call.kwargs["tools"] is not None
+    assert first_call.kwargs["temperature"] == 0.1
+
+    # Check that we got the content from our mocked tool execution result
+    chunks = [chunk async for chunk in result]
+    assert len(chunks) > 0
+    assert chunks[0].response.output[0].type == "function_call"
+    assert chunks[0].response.output[0].name == "get_weather"
+
+
+@pytest.mark.asyncio
 async def test_create_openai_response_with_multiple_messages(openai_responses_impl, mock_inference_api):
     """Test creating an OpenAI response with multiple messages."""
     # Setup
@@ -314,3 +384,141 @@ async def test_prepend_previous_response_web_search(get_previous_response_with_i
     # Check for new input
     assert isinstance(input[3], OpenAIResponseMessage)
     assert input[3].content == "fake_input"
+
+
+@pytest.mark.asyncio
+async def test_create_openai_response_with_instructions(openai_responses_impl, mock_inference_api):
+    # Setup
+    input_text = "What is the capital of Ireland?"
+    model = "meta-llama/Llama-3.1-8B-Instruct"
+    instructions = "You are a geography expert. Provide concise answers."
+
+    # Load the chat completion fixture
+    mock_chat_completion = load_chat_completion_fixture("simple_chat_completion.yaml")
+    mock_inference_api.openai_chat_completion.return_value = mock_chat_completion
+
+    # Execute
+    await openai_responses_impl.create_openai_response(
+        input=input_text,
+        model=model,
+        instructions=instructions,
+    )
+
+    # Verify
+    mock_inference_api.openai_chat_completion.assert_called_once()
+    call_args = mock_inference_api.openai_chat_completion.call_args
+    sent_messages = call_args.kwargs["messages"]
+
+    # Check that instructions were prepended as a system message
+    assert len(sent_messages) == 2
+    assert sent_messages[0].role == "system"
+    assert sent_messages[0].content == instructions
+    assert sent_messages[1].role == "user"
+    assert sent_messages[1].content == input_text
+
+
+@pytest.mark.asyncio
+async def test_create_openai_response_with_instructions_and_multiple_messages(
+    openai_responses_impl, mock_inference_api
+):
+    # Setup
+    input_messages = [
+        OpenAIResponseMessage(role="user", content="Name some towns in Ireland", name=None),
+        OpenAIResponseMessage(
+            role="assistant",
+            content="Galway, Longford, Sligo",
+            name=None,
+        ),
+        OpenAIResponseMessage(role="user", content="Which is the largest?", name=None),
+    ]
+    model = "meta-llama/Llama-3.1-8B-Instruct"
+    instructions = "You are a geography expert. Provide concise answers."
+
+    mock_chat_completion = load_chat_completion_fixture("simple_chat_completion.yaml")
+    mock_inference_api.openai_chat_completion.return_value = mock_chat_completion
+
+    # Execute
+    await openai_responses_impl.create_openai_response(
+        input=input_messages,
+        model=model,
+        instructions=instructions,
+    )
+
+    # Verify
+    mock_inference_api.openai_chat_completion.assert_called_once()
+    call_args = mock_inference_api.openai_chat_completion.call_args
+    sent_messages = call_args.kwargs["messages"]
+
+    # Check that instructions were prepended as a system message
+    assert len(sent_messages) == 4  # 1 system + 3 input messages
+    assert sent_messages[0].role == "system"
+    assert sent_messages[0].content == instructions
+
+    # Check the rest of the messages were converted correctly
+    assert sent_messages[1].role == "user"
+    assert sent_messages[1].content == "Name some towns in Ireland"
+    assert sent_messages[2].role == "assistant"
+    assert sent_messages[2].content == "Galway, Longford, Sligo"
+    assert sent_messages[3].role == "user"
+    assert sent_messages[3].content == "Which is the largest?"
+
+
+@pytest.mark.asyncio
+@patch.object(OpenAIResponsesImpl, "_get_previous_response_with_input")
+async def test_create_openai_response_with_instructions_and_previous_response(
+    get_previous_response_with_input, openai_responses_impl, mock_inference_api
+):
+    """Test prepending both instructions and previous response."""
+
+    input_item_message = OpenAIResponseMessage(
+        id="123",
+        content="Name some towns in Ireland",
+        role="user",
+    )
+    input_items = OpenAIResponseInputItemList(data=[input_item_message])
+    response_output_message = OpenAIResponseMessage(
+        id="123",
+        content="Galway, Longford, Sligo",
+        status="completed",
+        role="assistant",
+    )
+    response = OpenAIResponseObject(
+        created_at=1,
+        id="resp_123",
+        model="fake_model",
+        output=[response_output_message],
+        status="completed",
+    )
+    previous_response = OpenAIResponsePreviousResponseWithInputItems(
+        input_items=input_items,
+        response=response,
+    )
+    get_previous_response_with_input.return_value = previous_response
+
+    model = "meta-llama/Llama-3.1-8B-Instruct"
+    instructions = "You are a geography expert. Provide concise answers."
+    mock_chat_completion = load_chat_completion_fixture("simple_chat_completion.yaml")
+    mock_inference_api.openai_chat_completion.return_value = mock_chat_completion
+
+    # Execute
+    await openai_responses_impl.create_openai_response(
+        input="Which is the largest?", model=model, instructions=instructions, previous_response_id="123"
+    )
+
+    # Verify
+    mock_inference_api.openai_chat_completion.assert_called_once()
+    call_args = mock_inference_api.openai_chat_completion.call_args
+    sent_messages = call_args.kwargs["messages"]
+
+    # Check that instructions were prepended as a system message
+    assert len(sent_messages) == 4
+    assert sent_messages[0].role == "system"
+    assert sent_messages[0].content == instructions
+
+    # Check the rest of the messages were converted correctly
+    assert sent_messages[1].role == "user"
+    assert sent_messages[1].content == "Name some towns in Ireland"
+    assert sent_messages[2].role == "assistant"
+    assert sent_messages[2].content == "Galway, Longford, Sligo"
+    assert sent_messages[3].role == "user"
+    assert sent_messages[3].content == "Which is the largest?"

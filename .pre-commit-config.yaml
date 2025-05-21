@@ -94,9 +94,6 @@ repos:
         pass_filenames: false
         require_serial: true
         files: ^llama_stack/templates/.*$|^llama_stack/providers/.*/inference/.*/models\.py$
-
--   repo: local
-    hooks:
       - id: openapi-codegen
         name: API Spec Codegen
         additional_dependencies:
@@ -106,6 +103,14 @@ repos:
         pass_filenames: false
         require_serial: true
         files: ^llama_stack/apis/|^docs/openapi_generator/
+      - id: check-workflows-use-hashes
+        name: Check GitHub Actions use SHA-pinned actions
+        entry: ./scripts/check-workflows-use-hashes.sh
+        language: system
+        pass_filenames: false
+        require_serial: true
+        always_run: true
+        files: ^\.github/workflows/.*\.ya?ml$
 
 ci:
     autofix_commit_msg: 🎨 [pre-commit.ci] Auto format from pre-commit.com hooks

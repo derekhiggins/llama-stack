@@ -178,7 +178,7 @@ image_name: ollama
 image_type: conda
 
 # If some providers are external, you can specify the path to the implementation
-external_providers_dir: /etc/llama-stack/providers.d
+external_providers_dir: ~/.llama/providers.d
 ```
 
 ```
@@ -206,7 +206,7 @@ distribution_spec:
 image_type: container
 image_name: ci-test
 # Path to external provider implementations
-external_providers_dir: /etc/llama-stack/providers.d
+external_providers_dir: ~/.llama/providers.d
 ```
 
 Here's an example for a custom Ollama provider:
@@ -271,7 +271,7 @@ Now, let's start the Llama Stack Distribution Server. You will need the YAML con
 
 ```
 llama stack run -h
-usage: llama stack run [-h] [--port PORT] [--image-name IMAGE_NAME] [--disable-ipv6] [--env KEY=VALUE] [--tls-keyfile TLS_KEYFILE] [--tls-certfile TLS_CERTFILE]
+usage: llama stack run [-h] [--port PORT] [--image-name IMAGE_NAME] [--env KEY=VALUE] [--tls-keyfile TLS_KEYFILE] [--tls-certfile TLS_CERTFILE]
                        [--image-type {conda,container,venv}]
                        config
 
@@ -285,7 +285,6 @@ options:
   --port PORT           Port to run the server on. It can also be passed via the env var LLAMA_STACK_PORT. (default: 8321)
   --image-name IMAGE_NAME
                         Name of the image to run. Defaults to the current environment (default: None)
-  --disable-ipv6        Disable IPv6 support (default: False)
   --env KEY=VALUE       Environment variables to pass to the server in KEY=VALUE format. Can be specified multiple times. (default: [])
   --tls-keyfile TLS_KEYFILE
                         Path to TLS key file for HTTPS (default: None)
@@ -339,6 +338,48 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://['::', '0.0.0.0']:8321 (Press CTRL+C to quit)
 INFO:     2401:db00:35c:2d2b:face:0:c9:0:54678 - "GET /models/list HTTP/1.1" 200 OK
 ```
+### Listing Distributions
+Using the list command, you can view all existing Llama Stack distributions, including stacks built from templates, from scratch, or using custom configuration files.
+
+```
+llama stack list -h
+usage: llama stack list [-h]
+
+list the build stacks
+
+options:
+  -h, --help  show this help message and exit
+```
+
+Example Usage
+
+```
+llama stack list
+```
+
+### Removing a Distribution
+Use the remove command to delete a distribution you've previously built.
+
+```
+llama stack rm -h
+usage: llama stack rm [-h] [--all] [name]
+
+Remove the build stack
+
+positional arguments:
+  name        Name of the stack to delete (default: None)
+
+options:
+  -h, --help  show this help message and exit
+  --all, -a   Delete all stacks (use with caution) (default: False)
+```
+
+Example
+```
+llama stack rm llamastack-test
+```
+
+To keep your environment organized and avoid clutter, consider using `llama stack list` to review old or unused distributions and `llama stack rm <name>` to delete them when they’re no longer needed.
 
 ### Troubleshooting
 

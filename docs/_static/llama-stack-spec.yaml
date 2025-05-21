@@ -27,10 +27,12 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - DatasetIO
-      description: ''
+      description: Append rows to a dataset.
       parameters:
         - name: dataset_id
           in: path
+          description: >-
+            The ID of the dataset to append the rows to.
           required: true
           schema:
             type: string
@@ -44,7 +46,8 @@ paths:
     post:
       responses:
         '200':
-          description: OK
+          description: >-
+            A BatchChatCompletionResponse with the full completions.
           content:
             application/json:
               schema:
@@ -61,7 +64,8 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Inference
-      description: ''
+      description: >-
+        Generate chat completions for a batch of messages using the specified model.
       parameters: []
       requestBody:
         content:
@@ -73,7 +77,8 @@ paths:
     post:
       responses:
         '200':
-          description: OK
+          description: >-
+            A BatchCompletionResponse with the full completions.
           content:
             application/json:
               schema:
@@ -90,7 +95,8 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Inference
-      description: ''
+      description: >-
+        Generate completions for a batch of content using the specified model.
       parameters: []
       requestBody:
         content:
@@ -115,7 +121,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - PostTraining (Coming Soon)
-      description: ''
+      description: Cancel a training job.
       parameters: []
       requestBody:
         content:
@@ -129,7 +135,7 @@ paths:
         '200':
           description: >-
             If stream=False, returns a ChatCompletionResponse with the full completion.
-            If stream=True, returns an SSE event stream of ChatCompletionResponseStreamChunk
+            If stream=True, returns an SSE event stream of ChatCompletionResponseStreamChunk.
           content:
             application/json:
               schema:
@@ -164,7 +170,7 @@ paths:
         '200':
           description: >-
             If stream=False, returns a CompletionResponse with the full completion.
-            If stream=True, returns an SSE event stream of CompletionResponseStreamChunk
+            If stream=True, returns an SSE event stream of CompletionResponseStreamChunk.
           content:
             application/json:
               schema:
@@ -300,7 +306,7 @@ paths:
         '200':
           description: >-
             If stream=False, returns a Turn object. If stream=True, returns an SSE
-            event stream of AgentTurnResponseStreamChunk
+            event stream of AgentTurnResponseStreamChunk.
           content:
             application/json:
               schema:
@@ -346,8 +352,7 @@ paths:
     post:
       responses:
         '200':
-          description: >-
-            Runtime representation of an annotated type.
+          description: An OpenAIResponseObject.
           content:
             application/json:
               schema:
@@ -379,7 +384,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A ListBucketResponse.
           content:
             application/json:
               schema:
@@ -400,13 +405,14 @@ paths:
       parameters:
         - name: bucket
           in: query
+          description: 'Bucket name (valid chars: a-zA-Z0-9_-).'
           required: true
           schema:
             type: string
     post:
       responses:
         '200':
-          description: OK
+          description: A FileUploadResponse.
           content:
             application/json:
               schema:
@@ -490,7 +496,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A Session.
           content:
             application/json:
               schema:
@@ -567,7 +573,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A FileResponse.
           content:
             application/json:
               schema:
@@ -589,14 +595,14 @@ paths:
       parameters:
         - name: bucket
           in: path
-          description: 'Bucket name (valid chars: a-zA-Z0-9_-)'
+          description: 'Bucket name (valid chars: a-zA-Z0-9_-).'
           required: true
           schema:
             type: string
         - name: key
           in: path
           description: >-
-            Key under which the file is stored (valid chars: a-zA-Z0-9_-/.)
+            Key under which the file is stored (valid chars: a-zA-Z0-9_-/.).
           required: true
           schema:
             type: string
@@ -621,14 +627,14 @@ paths:
       parameters:
         - name: bucket
           in: path
-          description: 'Bucket name (valid chars: a-zA-Z0-9_-)'
+          description: 'Bucket name (valid chars: a-zA-Z0-9_-).'
           required: true
           schema:
             type: string
         - name: key
           in: path
           description: >-
-            Key under which the file is stored (valid chars: a-zA-Z0-9_-/.)
+            Key under which the file is stored (valid chars: a-zA-Z0-9_-/.).
           required: true
           schema:
             type: string
@@ -639,7 +645,7 @@ paths:
           description: >-
             An array of embeddings, one for each content. Each embedding is a list
             of floats. The dimensionality of the embedding is model-specific; you
-            can check model metadata using /models/{model_id}
+            can check model metadata using /models/{model_id}.
           content:
             application/json:
               schema:
@@ -670,7 +676,7 @@ paths:
       responses:
         '200':
           description: >-
-            EvaluateResponse object containing generations and scores
+            EvaluateResponse object containing generations and scores.
           content:
             application/json:
               schema:
@@ -796,7 +802,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A Benchmark.
           content:
             application/json:
               schema:
@@ -813,10 +819,40 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Benchmarks
-      description: ''
+      description: Get a benchmark by its ID.
       parameters:
         - name: benchmark_id
           in: path
+          description: The ID of the benchmark to get.
+          required: true
+          schema:
+            type: string
+  /v1/openai/v1/chat/completions/{completion_id}:
+    get:
+      responses:
+        '200':
+          description: A OpenAICompletionWithInputMessages.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAICompletionWithInputMessages'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - Inference
+      description: Describe a chat completion by its ID.
+      parameters:
+        - name: completion_id
+          in: path
+          description: ID of the chat completion.
           required: true
           schema:
             type: string
@@ -824,7 +860,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A Dataset.
           content:
             application/json:
               schema:
@@ -841,10 +877,11 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Datasets
-      description: ''
+      description: Get a dataset by its ID.
       parameters:
         - name: dataset_id
           in: path
+          description: The ID of the dataset to get.
           required: true
           schema:
             type: string
@@ -864,10 +901,11 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Datasets
-      description: ''
+      description: Unregister a dataset by its ID.
       parameters:
         - name: dataset_id
           in: path
+          description: The ID of the dataset to unregister.
           required: true
           schema:
             type: string
@@ -875,7 +913,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A Model.
           content:
             application/json:
               schema:
@@ -892,10 +930,11 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Models
-      description: ''
+      description: Get a model by its identifier.
       parameters:
         - name: model_id
           in: path
+          description: The identifier of the model to get.
           required: true
           schema:
             type: string
@@ -915,10 +954,12 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Models
-      description: ''
+      description: Unregister a model.
       parameters:
         - name: model_id
           in: path
+          description: >-
+            The identifier of the model to unregister.
           required: true
           schema:
             type: string
@@ -956,7 +997,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A ScoringFn.
           content:
             application/json:
               schema:
@@ -973,10 +1014,11 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - ScoringFunctions
-      description: ''
+      description: Get a scoring function by its ID.
       parameters:
         - name: scoring_fn_id
           in: path
+          description: The ID of the scoring function to get.
           required: true
           schema:
             type: string
@@ -984,7 +1026,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A Shield.
           content:
             application/json:
               schema:
@@ -1001,10 +1043,11 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Shields
-      description: ''
+      description: Get a shield by its identifier.
       parameters:
         - name: identifier
           in: path
+          description: The identifier of the shield to get.
           required: true
           schema:
             type: string
@@ -1012,7 +1055,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A Span.
           content:
             application/json:
               schema:
@@ -1029,15 +1072,18 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Telemetry
-      description: ''
+      description: Get a span by its ID.
       parameters:
         - name: trace_id
           in: path
+          description: >-
+            The ID of the trace to get the span from.
           required: true
           schema:
             type: string
         - name: span_id
           in: path
+          description: The ID of the span to get.
           required: true
           schema:
             type: string
@@ -1045,7 +1091,7 @@ paths:
     post:
       responses:
         '200':
-          description: OK
+          description: A QuerySpanTreeResponse.
           content:
             application/json:
               schema:
@@ -1062,10 +1108,11 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Telemetry
-      description: ''
+      description: Get a span tree by its ID.
       parameters:
         - name: span_id
           in: path
+          description: The ID of the span to get the tree from.
           required: true
           schema:
             type: string
@@ -1079,7 +1126,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A Tool.
           content:
             application/json:
               schema:
@@ -1096,10 +1143,11 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - ToolGroups
-      description: ''
+      description: Get a tool by its name.
       parameters:
         - name: tool_name
           in: path
+          description: The name of the tool to get.
           required: true
           schema:
             type: string
@@ -1107,7 +1155,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A ToolGroup.
           content:
             application/json:
               schema:
@@ -1124,10 +1172,11 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - ToolGroups
-      description: ''
+      description: Get a tool group by its ID.
       parameters:
         - name: toolgroup_id
           in: path
+          description: The ID of the tool group to get.
           required: true
           schema:
             type: string
@@ -1147,10 +1196,11 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - ToolGroups
-      description: Unregister a tool group
+      description: Unregister a tool group.
       parameters:
         - name: toolgroup_id
           in: path
+          description: The ID of the tool group to unregister.
           required: true
           schema:
             type: string
@@ -1158,7 +1208,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A Trace.
           content:
             application/json:
               schema:
@@ -1175,10 +1225,11 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Telemetry
-      description: ''
+      description: Get a trace by its ID.
       parameters:
         - name: trace_id
           in: path
+          description: The ID of the trace to get.
           required: true
           schema:
             type: string
@@ -1186,7 +1237,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A PostTrainingJobArtifactsResponse.
           content:
             application/json:
               schema:
@@ -1203,10 +1254,12 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - PostTraining (Coming Soon)
-      description: ''
+      description: Get the artifacts of a training job.
       parameters:
         - name: job_uuid
           in: query
+          description: >-
+            The UUID of the job to get the artifacts of.
           required: true
           schema:
             type: string
@@ -1214,7 +1267,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A PostTrainingJobStatusResponse.
           content:
             application/json:
               schema:
@@ -1231,10 +1284,12 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - PostTraining (Coming Soon)
-      description: ''
+      description: Get the status of a training job.
       parameters:
         - name: job_uuid
           in: query
+          description: >-
+            The UUID of the job to get the status of.
           required: true
           schema:
             type: string
@@ -1242,7 +1297,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A ListPostTrainingJobsResponse.
           content:
             application/json:
               schema:
@@ -1259,13 +1314,13 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - PostTraining (Coming Soon)
-      description: ''
+      description: Get all training jobs.
       parameters: []
   /v1/files/session:{upload_id}:
     get:
       responses:
         '200':
-          description: OK
+          description: A FileUploadResponse.
           content:
             application/json:
               schema:
@@ -1283,18 +1338,19 @@ paths:
       tags:
         - Files
       description: >-
-        Returns information about an existsing upload session
+        Returns information about an existsing upload session.
       parameters:
         - name: upload_id
           in: path
-          description: ID of the upload session
+          description: ID of the upload session.
           required: true
           schema:
             type: string
     post:
       responses:
         '200':
-          description: OK
+          description: >-
+            A FileResponse or None if the upload is not complete.
           content:
             application/json:
               schema:
@@ -1319,7 +1375,7 @@ paths:
       parameters:
         - name: upload_id
           in: path
-          description: ID of the upload session
+          description: ID of the upload session.
           required: true
           schema:
             type: string
@@ -1334,7 +1390,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A VectorDB.
           content:
             application/json:
               schema:
@@ -1351,10 +1407,12 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - VectorDBs
-      description: ''
+      description: Get a vector database by its identifier.
       parameters:
         - name: vector_db_id
           in: path
+          description: >-
+            The identifier of the vector database to get.
           required: true
           schema:
             type: string
@@ -1374,10 +1432,12 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - VectorDBs
-      description: ''
+      description: Unregister a vector database.
       parameters:
         - name: vector_db_id
           in: path
+          description: >-
+            The identifier of the vector database to unregister.
           required: true
           schema:
             type: string
@@ -1385,7 +1445,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A HealthInfo.
           content:
             application/json:
               schema:
@@ -1402,7 +1462,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Inspect
-      description: ''
+      description: Get the health of the service.
       parameters: []
   /v1/tool-runtime/rag-tool/insert:
     post:
@@ -1447,7 +1507,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - VectorIO
-      description: ''
+      description: Insert chunks into a vector database.
       parameters: []
       requestBody:
         content:
@@ -1459,7 +1519,8 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: >-
+            A ProviderInfo object containing the provider's details.
           content:
             application/json:
               schema:
@@ -1476,10 +1537,12 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Providers
-      description: ''
+      description: >-
+        Get detailed information about a specific provider.
       parameters:
         - name: provider_id
           in: path
+          description: The ID of the provider to inspect.
           required: true
           schema:
             type: string
@@ -1487,7 +1550,7 @@ paths:
     post:
       responses:
         '200':
-          description: OK
+          description: A ToolInvocationResult.
           content:
             application/json:
               schema:
@@ -1504,7 +1567,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - ToolRuntime
-      description: Run a tool with the given arguments
+      description: Run a tool with the given arguments.
       parameters: []
       requestBody:
         content:
@@ -1516,7 +1579,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A PaginatedResponse.
           content:
             application/json:
               schema:
@@ -1545,9 +1608,9 @@ paths:
 
         The response includes:
 
-        - data: List of items for the current page
+        - data: List of items for the current page.
 
-        - has_more: Whether there are more items available after this set
+        - has_more: Whether there are more items available after this set.
       parameters:
         - name: dataset_id
           in: path
@@ -1573,7 +1636,7 @@ paths:
     get:
       responses:
         '200':
-          description: The status of the evaluationjob.
+          description: The status of the evaluation job.
           content:
             application/json:
               schema:
@@ -1718,7 +1781,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A ListBenchmarksResponse.
           content:
             application/json:
               schema:
@@ -1735,7 +1798,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Benchmarks
-      description: ''
+      description: List all benchmarks.
       parameters: []
     post:
       responses:
@@ -1753,7 +1816,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Benchmarks
-      description: ''
+      description: Register a benchmark.
       parameters: []
       requestBody:
         content:
@@ -1761,472 +1824,61 @@ paths:
             schema:
               $ref: '#/components/schemas/RegisterBenchmarkRequest'
         required: true
-  /v1/datasets:
-    get:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListDatasetsResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - Datasets
-      description: ''
-      parameters: []
-    post:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Dataset'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - Datasets
-      description: Register a new dataset.
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterDatasetRequest'
-        required: true
-  /v1/files/{bucket}:
-    get:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListFileResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - Files
-      description: List all files in a bucket.
-      parameters:
-        - name: bucket
-          in: path
-          description: 'Bucket name (valid chars: a-zA-Z0-9_-)'
-          required: true
-          schema:
-            type: string
-  /v1/models:
-    get:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListModelsResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - Models
-      description: ''
-      parameters: []
-    post:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - Models
-      description: ''
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterModelRequest'
-        required: true
-  /v1/providers:
-    get:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListProvidersResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - Providers
-      description: ''
-      parameters: []
-  /v1/inspect/routes:
-    get:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListRoutesResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - Inspect
-      description: ''
-      parameters: []
-  /v1/tool-runtime/list-tools:
-    get:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListToolDefsResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - ToolRuntime
-      description: ''
-      parameters:
-        - name: tool_group_id
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: mcp_endpoint
-          in: query
-          required: false
-          schema:
-            $ref: '#/components/schemas/URL'
-  /v1/scoring-functions:
-    get:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListScoringFunctionsResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - ScoringFunctions
-      description: ''
-      parameters: []
-    post:
-      responses:
-        '200':
-          description: OK
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - ScoringFunctions
-      description: ''
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterScoringFunctionRequest'
-        required: true
-  /v1/shields:
-    get:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListShieldsResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - Shields
-      description: ''
-      parameters: []
-    post:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Shield'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - Shields
-      description: ''
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterShieldRequest'
-        required: true
-  /v1/toolgroups:
-    get:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListToolGroupsResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - ToolGroups
-      description: List tool groups with optional provider
-      parameters: []
-    post:
-      responses:
-        '200':
-          description: OK
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - ToolGroups
-      description: Register a tool group
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterToolGroupRequest'
-        required: true
-  /v1/tools:
-    get:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListToolsResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - ToolGroups
-      description: List tools with optional tool group
-      parameters:
-        - name: toolgroup_id
-          in: query
-          required: false
-          schema:
-            type: string
-  /v1/vector-dbs:
-    get:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListVectorDBsResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - VectorDBs
-      description: ''
-      parameters: []
-    post:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VectorDB'
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - VectorDBs
-      description: ''
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterVectorDbRequest'
-        required: true
-  /v1/telemetry/events:
-    post:
-      responses:
-        '200':
-          description: OK
-        '400':
-          $ref: '#/components/responses/BadRequest400'
-        '429':
-          $ref: >-
-            #/components/responses/TooManyRequests429
-        '500':
-          $ref: >-
-            #/components/responses/InternalServerError500
-        default:
-          $ref: '#/components/responses/DefaultError'
-      tags:
-        - Telemetry
-      description: ''
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LogEventRequest'
-        required: true
   /v1/openai/v1/chat/completions:
+    get:
+      responses:
+        '200':
+          description: A ListOpenAIChatCompletionResponse.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOpenAIChatCompletionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - Inference
+      description: List all chat completions.
+      parameters:
+        - name: after
+          in: query
+          description: >-
+            The ID of the last chat completion to return.
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: >-
+            The maximum number of chat completions to return.
+          required: false
+          schema:
+            type: integer
+        - name: model
+          in: query
+          description: The model to filter by.
+          required: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: >-
+            The order to sort the chat completions by: "asc" or "desc". Defaults to
+            "desc".
+          required: false
+          schema:
+            $ref: '#/components/schemas/Order'
     post:
       responses:
         '200':
-          description: >-
-            Response from an OpenAI-compatible chat completion request. **OR** Chunk
-            from a streaming response to an OpenAI-compatible chat completion request.
+          description: An OpenAIChatCompletion.
           content:
             application/json:
               schema:
@@ -2255,11 +1907,477 @@ paths:
             schema:
               $ref: '#/components/schemas/OpenaiChatCompletionRequest'
         required: true
-  /v1/openai/v1/completions:
+  /v1/datasets:
+    get:
+      responses:
+        '200':
+          description: A ListDatasetsResponse.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDatasetsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - Datasets
+      description: List all datasets.
+      parameters: []
+    post:
+      responses:
+        '200':
+          description: A Dataset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - Datasets
+      description: Register a new dataset.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterDatasetRequest'
+        required: true
+  /v1/files/{bucket}:
+    get:
+      responses:
+        '200':
+          description: A ListFileResponse.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListFileResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - Files
+      description: List all files in a bucket.
+      parameters:
+        - name: bucket
+          in: path
+          description: 'Bucket name (valid chars: a-zA-Z0-9_-).'
+          required: true
+          schema:
+            type: string
+  /v1/models:
+    get:
+      responses:
+        '200':
+          description: A ListModelsResponse.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListModelsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - Models
+      description: List all models.
+      parameters: []
+    post:
+      responses:
+        '200':
+          description: A Model.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - Models
+      description: Register a model.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterModelRequest'
+        required: true
+  /v1/providers:
+    get:
+      responses:
+        '200':
+          description: >-
+            A ListProvidersResponse containing information about all providers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListProvidersResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - Providers
+      description: List all available providers.
+      parameters: []
+  /v1/inspect/routes:
+    get:
+      responses:
+        '200':
+          description: A ListRoutesResponse.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRoutesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - Inspect
+      description: List all routes.
+      parameters: []
+  /v1/tool-runtime/list-tools:
+    get:
+      responses:
+        '200':
+          description: A ListToolDefsResponse.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListToolDefsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - ToolRuntime
+      description: List all tools in the runtime.
+      parameters:
+        - name: tool_group_id
+          in: query
+          description: >-
+            The ID of the tool group to list tools for.
+          required: false
+          schema:
+            type: string
+        - name: mcp_endpoint
+          in: query
+          description: >-
+            The MCP endpoint to use for the tool group.
+          required: false
+          schema:
+            $ref: '#/components/schemas/URL'
+  /v1/scoring-functions:
+    get:
+      responses:
+        '200':
+          description: A ListScoringFunctionsResponse.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListScoringFunctionsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - ScoringFunctions
+      description: List all scoring functions.
+      parameters: []
     post:
       responses:
         '200':
           description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - ScoringFunctions
+      description: Register a scoring function.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterScoringFunctionRequest'
+        required: true
+  /v1/shields:
+    get:
+      responses:
+        '200':
+          description: A ListShieldsResponse.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListShieldsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - Shields
+      description: List all shields.
+      parameters: []
+    post:
+      responses:
+        '200':
+          description: A Shield.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shield'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - Shields
+      description: Register a shield.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterShieldRequest'
+        required: true
+  /v1/toolgroups:
+    get:
+      responses:
+        '200':
+          description: A ListToolGroupsResponse.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListToolGroupsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - ToolGroups
+      description: List tool groups with optional provider.
+      parameters: []
+    post:
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - ToolGroups
+      description: Register a tool group.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterToolGroupRequest'
+        required: true
+  /v1/tools:
+    get:
+      responses:
+        '200':
+          description: A ListToolsResponse.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListToolsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - ToolGroups
+      description: List tools with optional tool group.
+      parameters:
+        - name: toolgroup_id
+          in: query
+          description: >-
+            The ID of the tool group to list tools for.
+          required: false
+          schema:
+            type: string
+  /v1/vector-dbs:
+    get:
+      responses:
+        '200':
+          description: A ListVectorDBsResponse.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListVectorDBsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - VectorDBs
+      description: List all vector databases.
+      parameters: []
+    post:
+      responses:
+        '200':
+          description: A VectorDB.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VectorDB'
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - VectorDBs
+      description: Register a vector database.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterVectorDbRequest'
+        required: true
+  /v1/telemetry/events:
+    post:
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest400'
+        '429':
+          $ref: >-
+            #/components/responses/TooManyRequests429
+        '500':
+          $ref: >-
+            #/components/responses/InternalServerError500
+        default:
+          $ref: '#/components/responses/DefaultError'
+      tags:
+        - Telemetry
+      description: Log an event.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogEventRequest'
+        required: true
+  /v1/openai/v1/completions:
+    post:
+      responses:
+        '200':
+          description: An OpenAICompletion.
           content:
             application/json:
               schema:
@@ -2290,7 +2408,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A OpenAIListModelsResponse.
           content:
             application/json:
               schema:
@@ -2307,13 +2425,13 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Models
-      description: ''
+      description: List models using the OpenAI API.
       parameters: []
   /v1/post-training/preference-optimize:
     post:
       responses:
         '200':
-          description: OK
+          description: A PostTrainingJob.
           content:
             application/json:
               schema:
@@ -2330,7 +2448,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - PostTraining (Coming Soon)
-      description: ''
+      description: Run preference optimization of a model.
       parameters: []
       requestBody:
         content:
@@ -2372,7 +2490,7 @@ paths:
     post:
       responses:
         '200':
-          description: OK
+          description: A QueryChunksResponse.
           content:
             application/json:
               schema:
@@ -2389,7 +2507,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - VectorIO
-      description: ''
+      description: Query chunks from a vector database.
       parameters: []
       requestBody:
         content:
@@ -2401,7 +2519,7 @@ paths:
     post:
       responses:
         '200':
-          description: OK
+          description: A QueryMetricsResponse.
           content:
             application/json:
               schema:
@@ -2418,10 +2536,11 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Telemetry
-      description: ''
+      description: Query metrics.
       parameters:
         - name: metric_name
           in: path
+          description: The name of the metric to query.
           required: true
           schema:
             type: string
@@ -2435,7 +2554,7 @@ paths:
     post:
       responses:
         '200':
-          description: OK
+          description: A QuerySpansResponse.
           content:
             application/json:
               schema:
@@ -2452,7 +2571,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Telemetry
-      description: ''
+      description: Query spans.
       parameters: []
       requestBody:
         content:
@@ -2464,7 +2583,7 @@ paths:
     post:
       responses:
         '200':
-          description: OK
+          description: A QueryTracesResponse.
           content:
             application/json:
               schema:
@@ -2481,7 +2600,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Telemetry
-      description: ''
+      description: Query traces.
       parameters: []
       requestBody:
         content:
@@ -2587,7 +2706,7 @@ paths:
     post:
       responses:
         '200':
-          description: OK
+          description: A RunShieldResponse.
           content:
             application/json:
               schema:
@@ -2604,7 +2723,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Safety
-      description: ''
+      description: Run a shield.
       parameters: []
       requestBody:
         content:
@@ -2629,7 +2748,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Telemetry
-      description: ''
+      description: Save spans to a dataset.
       parameters: []
       requestBody:
         content:
@@ -2642,7 +2761,7 @@ paths:
       responses:
         '200':
           description: >-
-            ScoreResponse object containing rows and aggregated results
+            A ScoreResponse object containing rows and aggregated results.
           content:
             application/json:
               schema:
@@ -2671,7 +2790,7 @@ paths:
     post:
       responses:
         '200':
-          description: OK
+          description: A ScoreBatchResponse.
           content:
             application/json:
               schema:
@@ -2688,7 +2807,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Scoring
-      description: ''
+      description: Score a batch of rows.
       parameters: []
       requestBody:
         content:
@@ -2700,7 +2819,7 @@ paths:
     post:
       responses:
         '200':
-          description: OK
+          description: A PostTrainingJob.
           content:
             application/json:
               schema:
@@ -2717,7 +2836,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - PostTraining (Coming Soon)
-      description: ''
+      description: Run supervised fine-tuning of a model.
       parameters: []
       requestBody:
         content:
@@ -2758,7 +2877,7 @@ paths:
     get:
       responses:
         '200':
-          description: OK
+          description: A VersionInfo.
           content:
             application/json:
               schema:
@@ -2775,7 +2894,7 @@ paths:
           $ref: '#/components/responses/DefaultError'
       tags:
         - Inspect
-      description: ''
+      description: Get the version of the service.
       parameters: []
 jsonSchemaDialect: >-
   https://json-schema.org/draft/2020-12/schema
@@ -2824,6 +2943,7 @@ components:
                 - type: string
                 - type: array
                 - type: object
+          description: The rows to append to the dataset.
       additionalProperties: false
       required:
         - rows
@@ -3328,22 +3448,34 @@ components:
       properties:
         model_id:
           type: string
+          description: >-
+            The identifier of the model to use. The model must be registered with
+            Llama Stack and available via the /models endpoint.
         messages_batch:
           type: array
           items:
             type: array
             items:
               $ref: '#/components/schemas/Message'
+          description: >-
+            The messages to generate completions for.
         sampling_params:
           $ref: '#/components/schemas/SamplingParams'
+          description: >-
+            (Optional) Parameters to control the sampling strategy.
         tools:
           type: array
           items:
             $ref: '#/components/schemas/ToolDefinition'
+          description: >-
+            (Optional) List of tool definitions available to the model.
         tool_config:
           $ref: '#/components/schemas/ToolConfig'
+          description: (Optional) Configuration for tool use.
         response_format:
           $ref: '#/components/schemas/ResponseFormat'
+          description: >-
+            (Optional) Grammar specification for guided (structured) decoding.
         logprobs:
           type: object
           properties:
@@ -3353,7 +3485,9 @@ components:
               description: >-
                 How many tokens (for each position) to return log probabilities for.
           additionalProperties: false
-          title: LogProbConfig
+          description: >-
+            (Optional) If specified, log probabilities for each token position will
+            be returned.
       additionalProperties: false
       required:
         - model_id
@@ -3426,14 +3560,22 @@ components:
       properties:
         model_id:
           type: string
+          description: >-
+            The identifier of the model to use. The model must be registered with
+            Llama Stack and available via the /models endpoint.
         content_batch:
           type: array
           items:
             $ref: '#/components/schemas/InterleavedContent'
+          description: The content to generate completions for.
         sampling_params:
           $ref: '#/components/schemas/SamplingParams'
+          description: >-
+            (Optional) Parameters to control the sampling strategy.
         response_format:
           $ref: '#/components/schemas/ResponseFormat'
+          description: >-
+            (Optional) Grammar specification for guided (structured) decoding.
         logprobs:
           type: object
           properties:
@@ -3443,7 +3585,9 @@ components:
               description: >-
                 How many tokens (for each position) to return log probabilities for.
           additionalProperties: false
-          title: LogProbConfig
+          description: >-
+            (Optional) If specified, log probabilities for each token position will
+            be returned.
       additionalProperties: false
       required:
         - model_id
@@ -3494,6 +3638,7 @@ components:
       properties:
         job_uuid:
           type: string
+          description: The UUID of the job to cancel.
       additionalProperties: false
       required:
         - job_uuid
@@ -3510,17 +3655,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Message'
-          description: List of messages in the conversation
+          description: List of messages in the conversation.
         sampling_params:
           $ref: '#/components/schemas/SamplingParams'
           description: >-
-            Parameters to control the sampling strategy
+            Parameters to control the sampling strategy.
         tools:
           type: array
           items:
             $ref: '#/components/schemas/ToolDefinition'
           description: >-
-            (Optional) List of tool definitions available to the model
+            (Optional) List of tool definitions available to the model.
         tool_choice:
           type: string
           enum:
@@ -3703,15 +3848,16 @@ components:
             Llama Stack and available via the /models endpoint.
         content:
           $ref: '#/components/schemas/InterleavedContent'
-          description: The content to generate a completion for
+          description: >-
+            The content to generate a completion for.
         sampling_params:
           $ref: '#/components/schemas/SamplingParams'
           description: >-
-            (Optional) Parameters to control the sampling strategy
+            (Optional) Parameters to control the sampling strategy.
         response_format:
           $ref: '#/components/schemas/ResponseFormat'
           description: >-
-            (Optional) Grammar specification for guided (structured) decoding
+            (Optional) Grammar specification for guided (structured) decoding.
         stream:
           type: boolean
           description: >-
@@ -4806,6 +4952,8 @@ components:
         model:
           type: string
           description: The underlying LLM used for completions.
+        instructions:
+          type: string
         previous_response_id:
           type: string
           description: >-
@@ -4939,17 +5087,17 @@ components:
         bucket:
           type: string
           description: >-
-            Bucket under which the file is stored (valid chars: a-zA-Z0-9_-)
+            Bucket under which the file is stored (valid chars: a-zA-Z0-9_-).
         key:
           type: string
           description: >-
-            Key under which the file is stored (valid chars: a-zA-Z0-9_-/.)
+            Key under which the file is stored (valid chars: a-zA-Z0-9_-/.).
         mime_type:
           type: string
-          description: MIME type of the file
+          description: MIME type of the file.
         size:
           type: integer
-          description: File size in bytes
+          description: File size in bytes.
       additionalProperties: false
       required:
         - bucket
@@ -5412,6 +5560,369 @@ components:
         - scoring_functions
         - metadata
       title: Benchmark
+    OpenAIAssistantMessageParam:
+      type: object
+      properties:
+        role:
+          type: string
+          const: assistant
+          default: assistant
+          description: >-
+            Must be "assistant" to identify this as the model's response
+        content:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                $ref: '#/components/schemas/OpenAIChatCompletionContentPartParam'
+          description: The content of the model's response
+        name:
+          type: string
+          description: >-
+            (Optional) The name of the assistant message participant.
+        tool_calls:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenAIChatCompletionToolCall'
+          description: >-
+            List of tool calls. Each tool call is an OpenAIChatCompletionToolCall
+            object.
+      additionalProperties: false
+      required:
+        - role
+      title: OpenAIAssistantMessageParam
+      description: >-
+        A message containing the model's (assistant) response in an OpenAI-compatible
+        chat completion request.
+    "OpenAIChatCompletionContentPartImageParam":
+      type: object
+      properties:
+        type:
+          type: string
+          const: image_url
+          default: image_url
+        image_url:
+          $ref: '#/components/schemas/OpenAIImageURL'
+      additionalProperties: false
+      required:
+        - type
+        - image_url
+      title: >-
+        OpenAIChatCompletionContentPartImageParam
+    OpenAIChatCompletionContentPartParam:
+      oneOf:
+        - $ref: '#/components/schemas/OpenAIChatCompletionContentPartTextParam'
+        - $ref: '#/components/schemas/OpenAIChatCompletionContentPartImageParam'
+      discriminator:
+        propertyName: type
+        mapping:
+          text: '#/components/schemas/OpenAIChatCompletionContentPartTextParam'
+          image_url: '#/components/schemas/OpenAIChatCompletionContentPartImageParam'
+    OpenAIChatCompletionContentPartTextParam:
+      type: object
+      properties:
+        type:
+          type: string
+          const: text
+          default: text
+        text:
+          type: string
+      additionalProperties: false
+      required:
+        - type
+        - text
+      title: OpenAIChatCompletionContentPartTextParam
+    OpenAIChatCompletionToolCall:
+      type: object
+      properties:
+        index:
+          type: integer
+        id:
+          type: string
+        type:
+          type: string
+          const: function
+          default: function
+        function:
+          $ref: '#/components/schemas/OpenAIChatCompletionToolCallFunction'
+      additionalProperties: false
+      required:
+        - type
+      title: OpenAIChatCompletionToolCall
+    OpenAIChatCompletionToolCallFunction:
+      type: object
+      properties:
+        name:
+          type: string
+        arguments:
+          type: string
+      additionalProperties: false
+      title: OpenAIChatCompletionToolCallFunction
+    OpenAIChoice:
+      type: object
+      properties:
+        message:
+          $ref: '#/components/schemas/OpenAIMessageParam'
+          description: The message from the model
+        finish_reason:
+          type: string
+          description: The reason the model stopped generating
+        index:
+          type: integer
+          description: The index of the choice
+        logprobs:
+          $ref: '#/components/schemas/OpenAIChoiceLogprobs'
+          description: >-
+            (Optional) The log probabilities for the tokens in the message
+      additionalProperties: false
+      required:
+        - message
+        - finish_reason
+        - index
+      title: OpenAIChoice
+      description: >-
+        A choice from an OpenAI-compatible chat completion response.
+    OpenAIChoiceLogprobs:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenAITokenLogProb'
+          description: >-
+            (Optional) The log probabilities for the tokens in the message
+        refusal:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenAITokenLogProb'
+          description: >-
+            (Optional) The log probabilities for the tokens in the message
+      additionalProperties: false
+      title: OpenAIChoiceLogprobs
+      description: >-
+        The log probabilities for the tokens in the message from an OpenAI-compatible
+        chat completion response.
+    OpenAIDeveloperMessageParam:
+      type: object
+      properties:
+        role:
+          type: string
+          const: developer
+          default: developer
+          description: >-
+            Must be "developer" to identify this as a developer message
+        content:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                $ref: '#/components/schemas/OpenAIChatCompletionContentPartParam'
+          description: The content of the developer message
+        name:
+          type: string
+          description: >-
+            (Optional) The name of the developer message participant.
+      additionalProperties: false
+      required:
+        - role
+        - content
+      title: OpenAIDeveloperMessageParam
+      description: >-
+        A message from the developer in an OpenAI-compatible chat completion request.
+    OpenAIImageURL:
+      type: object
+      properties:
+        url:
+          type: string
+        detail:
+          type: string
+      additionalProperties: false
+      required:
+        - url
+      title: OpenAIImageURL
+    OpenAIMessageParam:
+      oneOf:
+        - $ref: '#/components/schemas/OpenAIUserMessageParam'
+        - $ref: '#/components/schemas/OpenAISystemMessageParam'
+        - $ref: '#/components/schemas/OpenAIAssistantMessageParam'
+        - $ref: '#/components/schemas/OpenAIToolMessageParam'
+        - $ref: '#/components/schemas/OpenAIDeveloperMessageParam'
+      discriminator:
+        propertyName: role
+        mapping:
+          user: '#/components/schemas/OpenAIUserMessageParam'
+          system: '#/components/schemas/OpenAISystemMessageParam'
+          assistant: '#/components/schemas/OpenAIAssistantMessageParam'
+          tool: '#/components/schemas/OpenAIToolMessageParam'
+          developer: '#/components/schemas/OpenAIDeveloperMessageParam'
+    OpenAISystemMessageParam:
+      type: object
+      properties:
+        role:
+          type: string
+          const: system
+          default: system
+          description: >-
+            Must be "system" to identify this as a system message
+        content:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                $ref: '#/components/schemas/OpenAIChatCompletionContentPartParam'
+          description: >-
+            The content of the "system prompt". If multiple system messages are provided,
+            they are concatenated. The underlying Llama Stack code may also add other
+            system messages (for example, for formatting tool definitions).
+        name:
+          type: string
+          description: >-
+            (Optional) The name of the system message participant.
+      additionalProperties: false
+      required:
+        - role
+        - content
+      title: OpenAISystemMessageParam
+      description: >-
+        A system message providing instructions or context to the model.
+    OpenAITokenLogProb:
+      type: object
+      properties:
+        token:
+          type: string
+        bytes:
+          type: array
+          items:
+            type: integer
+        logprob:
+          type: number
+        top_logprobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenAITopLogProb'
+      additionalProperties: false
+      required:
+        - token
+        - logprob
+        - top_logprobs
+      title: OpenAITokenLogProb
+      description: >-
+        The log probability for a token from an OpenAI-compatible chat completion
+        response.
+    OpenAIToolMessageParam:
+      type: object
+      properties:
+        role:
+          type: string
+          const: tool
+          default: tool
+          description: >-
+            Must be "tool" to identify this as a tool response
+        tool_call_id:
+          type: string
+          description: >-
+            Unique identifier for the tool call this response is for
+        content:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                $ref: '#/components/schemas/OpenAIChatCompletionContentPartParam'
+          description: The response content from the tool
+      additionalProperties: false
+      required:
+        - role
+        - tool_call_id
+        - content
+      title: OpenAIToolMessageParam
+      description: >-
+        A message representing the result of a tool invocation in an OpenAI-compatible
+        chat completion request.
+    OpenAITopLogProb:
+      type: object
+      properties:
+        token:
+          type: string
+        bytes:
+          type: array
+          items:
+            type: integer
+        logprob:
+          type: number
+      additionalProperties: false
+      required:
+        - token
+        - logprob
+      title: OpenAITopLogProb
+      description: >-
+        The top log probability for a token from an OpenAI-compatible chat completion
+        response.
+    OpenAIUserMessageParam:
+      type: object
+      properties:
+        role:
+          type: string
+          const: user
+          default: user
+          description: >-
+            Must be "user" to identify this as a user message
+        content:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                $ref: '#/components/schemas/OpenAIChatCompletionContentPartParam'
+          description: >-
+            The content of the message, which can include text and other media
+        name:
+          type: string
+          description: >-
+            (Optional) The name of the user message participant.
+      additionalProperties: false
+      required:
+        - role
+        - content
+      title: OpenAIUserMessageParam
+      description: >-
+        A message from the user in an OpenAI-compatible chat completion request.
+    OpenAICompletionWithInputMessages:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the chat completion
+        choices:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenAIChoice'
+          description: List of choices
+        object:
+          type: string
+          const: chat.completion
+          default: chat.completion
+          description: >-
+            The object type, which will be "chat.completion"
+        created:
+          type: integer
+          description: >-
+            The Unix timestamp in seconds when the chat completion was created
+        model:
+          type: string
+          description: >-
+            The model that was used to generate the chat completion
+        input_messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenAIMessageParam'
+      additionalProperties: false
+      required:
+        - id
+        - choices
+        - object
+        - created
+        - model
+        - input_messages
+      title: OpenAICompletionWithInputMessages
     DataSource:
       oneOf:
         - $ref: '#/components/schemas/URIDataSource'
@@ -5869,8 +6380,10 @@ components:
           type: array
           items:
             type: string
+          description: The attributes to return in the tree.
         max_depth:
           type: integer
+          description: The maximum depth of the tree.
       additionalProperties: false
       title: GetSpanTreeRequest
     SpanStatus:
@@ -6234,6 +6747,8 @@ components:
       properties:
         vector_db_id:
           type: string
+          description: >-
+            The identifier of the vector database to insert the chunks into.
         chunks:
           type: array
           items:
@@ -6256,8 +6771,10 @@ components:
               - content
               - metadata
             title: Chunk
+          description: The chunks to insert.
         ttl_seconds:
           type: integer
+          description: The time to live of the chunks.
       additionalProperties: false
       required:
         - vector_db_id
@@ -6305,6 +6822,7 @@ components:
       properties:
         tool_name:
           type: string
+          description: The name of the tool to invoke.
         kwargs:
           type: object
           additionalProperties:
@@ -6315,6 +6833,8 @@ components:
               - type: string
               - type: array
               - type: object
+          description: >-
+            A dictionary of arguments to pass to the tool.
       additionalProperties: false
       required:
         - tool_name
@@ -6421,6 +6941,73 @@ components:
       required:
         - data
       title: ListBenchmarksResponse
+    Order:
+      type: string
+      enum:
+        - asc
+        - desc
+      title: Order
+    ListOpenAIChatCompletionResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The ID of the chat completion
+              choices:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OpenAIChoice'
+                description: List of choices
+              object:
+                type: string
+                const: chat.completion
+                default: chat.completion
+                description: >-
+                  The object type, which will be "chat.completion"
+              created:
+                type: integer
+                description: >-
+                  The Unix timestamp in seconds when the chat completion was created
+              model:
+                type: string
+                description: >-
+                  The model that was used to generate the chat completion
+              input_messages:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OpenAIMessageParam'
+            additionalProperties: false
+            required:
+              - id
+              - choices
+              - object
+              - created
+              - model
+              - input_messages
+            title: OpenAICompletionWithInputMessages
+        has_more:
+          type: boolean
+        first_id:
+          type: string
+        last_id:
+          type: string
+        object:
+          type: string
+          const: list
+          default: list
+      additionalProperties: false
+      required:
+        - data
+        - has_more
+        - first_id
+        - last_id
+        - object
+      title: ListOpenAIChatCompletionResponse
     ListDatasetsResponse:
       type: object
       properties:
@@ -6750,149 +7337,15 @@ components:
       properties:
         event:
           $ref: '#/components/schemas/Event'
+          description: The event to log.
         ttl_seconds:
           type: integer
+          description: The time to live of the event.
       additionalProperties: false
       required:
         - event
         - ttl_seconds
       title: LogEventRequest
-    OpenAIAssistantMessageParam:
-      type: object
-      properties:
-        role:
-          type: string
-          const: assistant
-          default: assistant
-          description: >-
-            Must be "assistant" to identify this as the model's response
-        content:
-          oneOf:
-            - type: string
-            - type: array
-              items:
-                $ref: '#/components/schemas/OpenAIChatCompletionContentPartParam'
-          description: The content of the model's response
-        name:
-          type: string
-          description: >-
-            (Optional) The name of the assistant message participant.
-        tool_calls:
-          type: array
-          items:
-            $ref: '#/components/schemas/OpenAIChatCompletionToolCall'
-          description: >-
-            List of tool calls. Each tool call is an OpenAIChatCompletionToolCall
-            object.
-      additionalProperties: false
-      required:
-        - role
-      title: OpenAIAssistantMessageParam
-      description: >-
-        A message containing the model's (assistant) response in an OpenAI-compatible
-        chat completion request.
-    "OpenAIChatCompletionContentPartImageParam":
-      type: object
-      properties:
-        type:
-          type: string
-          const: image_url
-          default: image_url
-        image_url:
-          $ref: '#/components/schemas/OpenAIImageURL'
-      additionalProperties: false
-      required:
-        - type
-        - image_url
-      title: >-
-        OpenAIChatCompletionContentPartImageParam
-    OpenAIChatCompletionContentPartParam:
-      oneOf:
-        - $ref: '#/components/schemas/OpenAIChatCompletionContentPartTextParam'
-        - $ref: '#/components/schemas/OpenAIChatCompletionContentPartImageParam'
-      discriminator:
-        propertyName: type
-        mapping:
-          text: '#/components/schemas/OpenAIChatCompletionContentPartTextParam'
-          image_url: '#/components/schemas/OpenAIChatCompletionContentPartImageParam'
-    OpenAIChatCompletionContentPartTextParam:
-      type: object
-      properties:
-        type:
-          type: string
-          const: text
-          default: text
-        text:
-          type: string
-      additionalProperties: false
-      required:
-        - type
-        - text
-      title: OpenAIChatCompletionContentPartTextParam
-    OpenAIChatCompletionToolCall:
-      type: object
-      properties:
-        index:
-          type: integer
-        id:
-          type: string
-        type:
-          type: string
-          const: function
-          default: function
-        function:
-          $ref: '#/components/schemas/OpenAIChatCompletionToolCallFunction'
-      additionalProperties: false
-      required:
-        - type
-      title: OpenAIChatCompletionToolCall
-    OpenAIChatCompletionToolCallFunction:
-      type: object
-      properties:
-        name:
-          type: string
-        arguments:
-          type: string
-      additionalProperties: false
-      title: OpenAIChatCompletionToolCallFunction
-    OpenAIDeveloperMessageParam:
-      type: object
-      properties:
-        role:
-          type: string
-          const: developer
-          default: developer
-          description: >-
-            Must be "developer" to identify this as a developer message
-        content:
-          oneOf:
-            - type: string
-            - type: array
-              items:
-                $ref: '#/components/schemas/OpenAIChatCompletionContentPartParam'
-          description: The content of the developer message
-        name:
-          type: string
-          description: >-
-            (Optional) The name of the developer message participant.
-      additionalProperties: false
-      required:
-        - role
-        - content
-      title: OpenAIDeveloperMessageParam
-      description: >-
-        A message from the developer in an OpenAI-compatible chat completion request.
-    OpenAIImageURL:
-      type: object
-      properties:
-        url:
-          type: string
-        detail:
-          type: string
-      additionalProperties: false
-      required:
-        - url
-      title: OpenAIImageURL
     OpenAIJSONSchema:
       type: object
       properties:
@@ -6916,21 +7369,6 @@ components:
       required:
         - name
       title: OpenAIJSONSchema
-    OpenAIMessageParam:
-      oneOf:
-        - $ref: '#/components/schemas/OpenAIUserMessageParam'
-        - $ref: '#/components/schemas/OpenAISystemMessageParam'
-        - $ref: '#/components/schemas/OpenAIAssistantMessageParam'
-        - $ref: '#/components/schemas/OpenAIToolMessageParam'
-        - $ref: '#/components/schemas/OpenAIDeveloperMessageParam'
-      discriminator:
-        propertyName: role
-        mapping:
-          user: '#/components/schemas/OpenAIUserMessageParam'
-          system: '#/components/schemas/OpenAISystemMessageParam'
-          assistant: '#/components/schemas/OpenAIAssistantMessageParam'
-          tool: '#/components/schemas/OpenAIToolMessageParam'
-          developer: '#/components/schemas/OpenAIDeveloperMessageParam'
     OpenAIResponseFormatJSONObject:
       type: object
       properties:
@@ -6978,93 +7416,6 @@ components:
       required:
         - type
       title: OpenAIResponseFormatText
-    OpenAISystemMessageParam:
-      type: object
-      properties:
-        role:
-          type: string
-          const: system
-          default: system
-          description: >-
-            Must be "system" to identify this as a system message
-        content:
-          oneOf:
-            - type: string
-            - type: array
-              items:
-                $ref: '#/components/schemas/OpenAIChatCompletionContentPartParam'
-          description: >-
-            The content of the "system prompt". If multiple system messages are provided,
-            they are concatenated. The underlying Llama Stack code may also add other
-            system messages (for example, for formatting tool definitions).
-        name:
-          type: string
-          description: >-
-            (Optional) The name of the system message participant.
-      additionalProperties: false
-      required:
-        - role
-        - content
-      title: OpenAISystemMessageParam
-      description: >-
-        A system message providing instructions or context to the model.
-    OpenAIToolMessageParam:
-      type: object
-      properties:
-        role:
-          type: string
-          const: tool
-          default: tool
-          description: >-
-            Must be "tool" to identify this as a tool response
-        tool_call_id:
-          type: string
-          description: >-
-            Unique identifier for the tool call this response is for
-        content:
-          oneOf:
-            - type: string
-            - type: array
-              items:
-                $ref: '#/components/schemas/OpenAIChatCompletionContentPartParam'
-          description: The response content from the tool
-      additionalProperties: false
-      required:
-        - role
-        - tool_call_id
-        - content
-      title: OpenAIToolMessageParam
-      description: >-
-        A message representing the result of a tool invocation in an OpenAI-compatible
-        chat completion request.
-    OpenAIUserMessageParam:
-      type: object
-      properties:
-        role:
-          type: string
-          const: user
-          default: user
-          description: >-
-            Must be "user" to identify this as a user message
-        content:
-          oneOf:
-            - type: string
-            - type: array
-              items:
-                $ref: '#/components/schemas/OpenAIChatCompletionContentPartParam'
-          description: >-
-            The content of the message, which can include text and other media
-        name:
-          type: string
-          description: >-
-            (Optional) The name of the user message participant.
-      additionalProperties: false
-      required:
-        - role
-        - content
-      title: OpenAIUserMessageParam
-      description: >-
-        A message from the user in an OpenAI-compatible chat completion request.
     OpenaiChatCompletionRequest:
       type: object
       properties:
@@ -7077,11 +7428,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OpenAIMessageParam'
-          description: List of messages in the conversation
+          description: List of messages in the conversation.
         frequency_penalty:
           type: number
           description: >-
-            (Optional) The penalty for repeated tokens
+            (Optional) The penalty for repeated tokens.
         function_call:
           oneOf:
             - type: string
@@ -7094,7 +7445,7 @@ components:
                   - type: string
                   - type: array
                   - type: object
-          description: (Optional) The function call to use
+          description: (Optional) The function call to use.
         functions:
           type: array
           items:
@@ -7107,52 +7458,52 @@ components:
                 - type: string
                 - type: array
                 - type: object
-          description: (Optional) List of functions to use
+          description: (Optional) List of functions to use.
         logit_bias:
           type: object
           additionalProperties:
             type: number
-          description: (Optional) The logit bias to use
+          description: (Optional) The logit bias to use.
         logprobs:
           type: boolean
-          description: (Optional) The log probabilities to use
+          description: (Optional) The log probabilities to use.
         max_completion_tokens:
           type: integer
           description: >-
-            (Optional) The maximum number of tokens to generate
+            (Optional) The maximum number of tokens to generate.
         max_tokens:
           type: integer
           description: >-
-            (Optional) The maximum number of tokens to generate
+            (Optional) The maximum number of tokens to generate.
         n:
           type: integer
           description: >-
-            (Optional) The number of completions to generate
+            (Optional) The number of completions to generate.
         parallel_tool_calls:
           type: boolean
           description: >-
-            (Optional) Whether to parallelize tool calls
+            (Optional) Whether to parallelize tool calls.
         presence_penalty:
           type: number
           description: >-
-            (Optional) The penalty for repeated tokens
+            (Optional) The penalty for repeated tokens.
         response_format:
           $ref: '#/components/schemas/OpenAIResponseFormatParam'
-          description: (Optional) The response format to use
+          description: (Optional) The response format to use.
         seed:
           type: integer
-          description: (Optional) The seed to use
+          description: (Optional) The seed to use.
         stop:
           oneOf:
             - type: string
             - type: array
               items:
                 type: string
-          description: (Optional) The stop tokens to use
+          description: (Optional) The stop tokens to use.
         stream:
           type: boolean
           description: >-
-            (Optional) Whether to stream the response
+            (Optional) Whether to stream the response.
         stream_options:
           type: object
           additionalProperties:
@@ -7163,10 +7514,10 @@ components:
               - type: string
               - type: array
               - type: object
-          description: (Optional) The stream options to use
+          description: (Optional) The stream options to use.
         temperature:
           type: number
-          description: (Optional) The temperature to use
+          description: (Optional) The temperature to use.
         tool_choice:
           oneOf:
             - type: string
@@ -7179,7 +7530,7 @@ components:
                   - type: string
                   - type: array
                   - type: object
-          description: (Optional) The tool choice to use
+          description: (Optional) The tool choice to use.
         tools:
           type: array
           items:
@@ -7192,17 +7543,17 @@ components:
                 - type: string
                 - type: array
                 - type: object
-          description: (Optional) The tools to use
+          description: (Optional) The tools to use.
         top_logprobs:
           type: integer
           description: >-
-            (Optional) The top log probabilities to use
+            (Optional) The top log probabilities to use.
         top_p:
           type: number
-          description: (Optional) The top p to use
+          description: (Optional) The top p to use.
         user:
           type: string
-          description: (Optional) The user to use
+          description: (Optional) The user to use.
       additionalProperties: false
       required:
         - model
@@ -7278,30 +7629,6 @@ components:
       title: OpenAIChatCompletionChunk
       description: >-
         Chunk from a streaming response to an OpenAI-compatible chat completion request.
-    OpenAIChoice:
-      type: object
-      properties:
-        message:
-          $ref: '#/components/schemas/OpenAIMessageParam'
-          description: The message from the model
-        finish_reason:
-          type: string
-          description: The reason the model stopped generating
-        index:
-          type: integer
-          description: The index of the choice
-        logprobs:
-          $ref: '#/components/schemas/OpenAIChoiceLogprobs'
-          description: >-
-            (Optional) The log probabilities for the tokens in the message
-      additionalProperties: false
-      required:
-        - message
-        - finish_reason
-        - index
-      title: OpenAIChoice
-      description: >-
-        A choice from an OpenAI-compatible chat completion response.
     OpenAIChoiceDelta:
       type: object
       properties:
@@ -7323,26 +7650,6 @@ components:
       title: OpenAIChoiceDelta
       description: >-
         A delta from an OpenAI-compatible chat completion streaming response.
-    OpenAIChoiceLogprobs:
-      type: object
-      properties:
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/OpenAITokenLogProb'
-          description: >-
-            (Optional) The log probabilities for the tokens in the message
-        refusal:
-          type: array
-          items:
-            $ref: '#/components/schemas/OpenAITokenLogProb'
-          description: >-
-            (Optional) The log probabilities for the tokens in the message
-      additionalProperties: false
-      title: OpenAIChoiceLogprobs
-      description: >-
-        The log probabilities for the tokens in the message from an OpenAI-compatible
-        chat completion response.
     OpenAIChunkChoice:
       type: object
       properties:
@@ -7367,49 +7674,6 @@ components:
       title: OpenAIChunkChoice
       description: >-
         A chunk choice from an OpenAI-compatible chat completion streaming response.
-    OpenAITokenLogProb:
-      type: object
-      properties:
-        token:
-          type: string
-        bytes:
-          type: array
-          items:
-            type: integer
-        logprob:
-          type: number
-        top_logprobs:
-          type: array
-          items:
-            $ref: '#/components/schemas/OpenAITopLogProb'
-      additionalProperties: false
-      required:
-        - token
-        - logprob
-        - top_logprobs
-      title: OpenAITokenLogProb
-      description: >-
-        The log probability for a token from an OpenAI-compatible chat completion
-        response.
-    OpenAITopLogProb:
-      type: object
-      properties:
-        token:
-          type: string
-        bytes:
-          type: array
-          items:
-            type: integer
-        logprob:
-          type: number
-      additionalProperties: false
-      required:
-        - token
-        - logprob
-      title: OpenAITopLogProb
-      description: >-
-        The top log probability for a token from an OpenAI-compatible chat completion
-        response.
     OpenaiCompletionRequest:
       type: object
       properties:
@@ -7432,52 +7696,52 @@ components:
                 type: array
                 items:
                   type: integer
-          description: The prompt to generate a completion for
+          description: The prompt to generate a completion for.
         best_of:
           type: integer
           description: >-
-            (Optional) The number of completions to generate
+            (Optional) The number of completions to generate.
         echo:
           type: boolean
-          description: (Optional) Whether to echo the prompt
+          description: (Optional) Whether to echo the prompt.
         frequency_penalty:
           type: number
           description: >-
-            (Optional) The penalty for repeated tokens
+            (Optional) The penalty for repeated tokens.
         logit_bias:
           type: object
           additionalProperties:
             type: number
-          description: (Optional) The logit bias to use
+          description: (Optional) The logit bias to use.
         logprobs:
           type: boolean
-          description: (Optional) The log probabilities to use
+          description: (Optional) The log probabilities to use.
         max_tokens:
           type: integer
           description: >-
-            (Optional) The maximum number of tokens to generate
+            (Optional) The maximum number of tokens to generate.
         n:
           type: integer
           description: >-
-            (Optional) The number of completions to generate
+            (Optional) The number of completions to generate.
         presence_penalty:
           type: number
           description: >-
-            (Optional) The penalty for repeated tokens
+            (Optional) The penalty for repeated tokens.
         seed:
           type: integer
-          description: (Optional) The seed to use
+          description: (Optional) The seed to use.
         stop:
           oneOf:
             - type: string
             - type: array
               items:
                 type: string
-          description: (Optional) The stop tokens to use
+          description: (Optional) The stop tokens to use.
         stream:
           type: boolean
           description: >-
-            (Optional) Whether to stream the response
+            (Optional) Whether to stream the response.
         stream_options:
           type: object
           additionalProperties:
@@ -7488,16 +7752,16 @@ components:
               - type: string
               - type: array
               - type: object
-          description: (Optional) The stream options to use
+          description: (Optional) The stream options to use.
         temperature:
           type: number
-          description: (Optional) The temperature to use
+          description: (Optional) The temperature to use.
         top_p:
           type: number
-          description: (Optional) The top p to use
+          description: (Optional) The top p to use.
         user:
           type: string
-          description: (Optional) The user to use
+          description: (Optional) The user to use.
         guided_choice:
           type: array
           items:
@@ -7713,12 +7977,16 @@ components:
       properties:
         job_uuid:
           type: string
+          description: The UUID of the job to create.
         finetuned_model:
           type: string
+          description: The model to fine-tune.
         algorithm_config:
           $ref: '#/components/schemas/DPOAlignmentConfig'
+          description: The algorithm configuration.
         training_config:
           $ref: '#/components/schemas/TrainingConfig'
+          description: The training configuration.
         hyperparam_search_config:
           type: object
           additionalProperties:
@@ -7729,6 +7997,7 @@ components:
               - type: string
               - type: array
               - type: object
+          description: The hyperparam search configuration.
         logger_config:
           type: object
           additionalProperties:
@@ -7739,6 +8008,7 @@ components:
               - type: string
               - type: array
               - type: object
+          description: The logger configuration.
       additionalProperties: false
       required:
         - job_uuid
@@ -7794,18 +8064,37 @@ components:
       properties:
         query_generator_config:
           $ref: '#/components/schemas/RAGQueryGeneratorConfig'
+          description: Configuration for the query generator.
         max_tokens_in_context:
           type: integer
           default: 4096
+          description: Maximum number of tokens in the context.
         max_chunks:
           type: integer
           default: 5
+          description: Maximum number of chunks to retrieve.
+        chunk_template:
+          type: string
+          default: >
+            Result {index}
+
+            Content: {chunk.content}
+
+            Metadata: {metadata}
+          description: >-
+            Template for formatting each retrieved chunk in the context. Available
+            placeholders: {index} (1-based chunk ordinal), {chunk.content} (chunk
+            content string), {metadata} (chunk metadata dict). Default: "Result {index}\nContent:
+            {chunk.content}\nMetadata: {metadata}\n"
       additionalProperties: false
       required:
         - query_generator_config
         - max_tokens_in_context
         - max_chunks
+        - chunk_template
       title: RAGQueryConfig
+      description: >-
+        Configuration for the RAG query generation.
     RAGQueryGeneratorConfig:
       oneOf:
         - $ref: '#/components/schemas/DefaultRAGQueryGeneratorConfig'
@@ -7855,8 +8144,11 @@ components:
       properties:
         vector_db_id:
           type: string
+          description: >-
+            The identifier of the vector database to query.
         query:
           $ref: '#/components/schemas/InterleavedContent'
+          description: The query to search for.
         params:
           type: object
           additionalProperties:
@@ -7867,6 +8159,7 @@ components:
               - type: string
               - type: array
               - type: object
+          description: The parameters of the query.
       additionalProperties: false
       required:
         - vector_db_id
@@ -7911,16 +8204,19 @@ components:
       properties:
         start_time:
           type: integer
+          description: The start time of the metric to query.
         end_time:
           type: integer
+          description: The end time of the metric to query.
         granularity:
           type: string
+          description: The granularity of the metric to query.
         query_type:
           type: string
           enum:
             - range
             - instant
-          title: MetricQueryType
+          description: The type of query to perform.
         label_matchers:
           type: array
           items:
@@ -7945,6 +8241,8 @@ components:
               - value
               - operator
             title: MetricLabelMatcher
+          description: >-
+            The label matchers to apply to the metric.
       additionalProperties: false
       required:
         - start_time
@@ -8040,12 +8338,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/QueryCondition'
+          description: >-
+            The attribute filters to apply to the spans.
         attributes_to_return:
           type: array
           items:
             type: string
+          description: The attributes to return in the spans.
         max_depth:
           type: integer
+          description: The maximum depth of the tree.
       additionalProperties: false
       required:
         - attribute_filters
@@ -8069,14 +8371,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/QueryCondition'
+          description: >-
+            The attribute filters to apply to the traces.
         limit:
           type: integer
+          description: The limit of traces to return.
         offset:
           type: integer
+          description: The offset of the traces to return.
         order_by:
           type: array
           items:
             type: string
+          description: The order by of the traces to return.
       additionalProperties: false
       title: QueryTracesRequest
     QueryTracesResponse:
@@ -8095,16 +8402,25 @@ components:
       properties:
         benchmark_id:
           type: string
+          description: The ID of the benchmark to register.
         dataset_id:
           type: string
+          description: >-
+            The ID of the dataset to use for the benchmark.
         scoring_functions:
           type: array
           items:
             type: string
+          description: >-
+            The scoring functions to use for the benchmark.
         provider_benchmark_id:
           type: string
+          description: >-
+            The ID of the provider benchmark to use for the benchmark.
         provider_id:
           type: string
+          description: >-
+            The ID of the provider to use for the benchmark.
         metadata:
           type: object
           additionalProperties:
@@ -8115,6 +8431,7 @@ components:
               - type: string
               - type: array
               - type: object
+          description: The metadata to use for the benchmark.
       additionalProperties: false
       required:
         - benchmark_id
@@ -8131,7 +8448,7 @@ components:
             - eval/question-answer
             - eval/messages-answer
           description: >-
-            The purpose of the dataset. One of - "post-training/messages": The dataset
+            The purpose of the dataset. One of: - "post-training/messages": The dataset
             contains a messages column with list of messages for post-training. {
             "messages": [ {"role": "user", "content": "Hello, world!"}, {"role": "assistant",
             "content": "Hello, world!"}, ] } - "eval/question-answer": The dataset
@@ -8164,7 +8481,7 @@ components:
               - type: array
               - type: object
           description: >-
-            The metadata for the dataset. - E.g. {"description": "My dataset"}
+            The metadata for the dataset. - E.g. {"description": "My dataset"}.
         dataset_id:
           type: string
           description: >-
@@ -8179,10 +8496,14 @@ components:
       properties:
         model_id:
           type: string
+          description: The identifier of the model to register.
         provider_model_id:
           type: string
+          description: >-
+            The identifier of the model in the provider.
         provider_id:
           type: string
+          description: The identifier of the provider.
         metadata:
           type: object
           additionalProperties:
@@ -8193,8 +8514,10 @@ components:
               - type: string
               - type: array
               - type: object
+          description: Any additional metadata for this model.
         model_type:
           $ref: '#/components/schemas/ModelType'
+          description: The type of model to register.
       additionalProperties: false
       required:
         - model_id
@@ -8204,16 +8527,27 @@ components:
       properties:
         scoring_fn_id:
           type: string
+          description: >-
+            The ID of the scoring function to register.
         description:
           type: string
+          description: The description of the scoring function.
         return_type:
           $ref: '#/components/schemas/ParamType'
+          description: The return type of the scoring function.
         provider_scoring_fn_id:
           type: string
+          description: >-
+            The ID of the provider scoring function to use for the scoring function.
         provider_id:
           type: string
+          description: >-
+            The ID of the provider to use for the scoring function.
         params:
           $ref: '#/components/schemas/ScoringFnParams'
+          description: >-
+            The parameters for the scoring function for benchmark eval, these can
+            be overridden for app eval.
       additionalProperties: false
       required:
         - scoring_fn_id
@@ -8225,10 +8559,15 @@ components:
       properties:
         shield_id:
           type: string
+          description: >-
+            The identifier of the shield to register.
         provider_shield_id:
           type: string
+          description: >-
+            The identifier of the shield in the provider.
         provider_id:
           type: string
+          description: The identifier of the provider.
         params:
           type: object
           additionalProperties:
@@ -8239,6 +8578,7 @@ components:
               - type: string
               - type: array
               - type: object
+          description: The parameters of the shield.
       additionalProperties: false
       required:
         - shield_id
@@ -8248,10 +8588,15 @@ components:
       properties:
         toolgroup_id:
           type: string
+          description: The ID of the tool group to register.
         provider_id:
           type: string
+          description: >-
+            The ID of the provider to use for the tool group.
         mcp_endpoint:
           $ref: '#/components/schemas/URL'
+          description: >-
+            The MCP endpoint to use for the tool group.
         args:
           type: object
           additionalProperties:
@@ -8262,6 +8607,8 @@ components:
               - type: string
               - type: array
               - type: object
+          description: >-
+            A dictionary of arguments to pass to the tool group.
       additionalProperties: false
       required:
         - toolgroup_id
@@ -8272,14 +8619,21 @@ components:
       properties:
         vector_db_id:
           type: string
+          description: >-
+            The identifier of the vector database to register.
         embedding_model:
           type: string
+          description: The embedding model to use.
         embedding_dimension:
           type: integer
+          description: The dimension of the embedding model.
         provider_id:
           type: string
+          description: The identifier of the provider.
         provider_vector_db_id:
           type: string
+          description: >-
+            The identifier of the vector database in the provider.
       additionalProperties: false
       required:
         - vector_db_id
@@ -8316,10 +8670,12 @@ components:
       properties:
         shield_id:
           type: string
+          description: The identifier of the shield to run.
         messages:
           type: array
           items:
             $ref: '#/components/schemas/Message'
+          description: The messages to run the shield on.
         params:
           type: object
           additionalProperties:
@@ -8330,6 +8686,7 @@ components:
               - type: string
               - type: array
               - type: object
+          description: The parameters of the shield.
       additionalProperties: false
       required:
         - shield_id
@@ -8350,14 +8707,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/QueryCondition'
+          description: >-
+            The attribute filters to apply to the spans.
         attributes_to_save:
           type: array
           items:
             type: string
+          description: The attributes to save to the dataset.
         dataset_id:
           type: string
+          description: >-
+            The ID of the dataset to save the spans to.
         max_depth:
           type: integer
+          description: The maximum depth of the tree.
       additionalProperties: false
       required:
         - attribute_filters
@@ -8412,14 +8775,19 @@ components:
       properties:
         dataset_id:
           type: string
+          description: The ID of the dataset to score.
         scoring_functions:
           type: object
           additionalProperties:
             oneOf:
               - $ref: '#/components/schemas/ScoringFnParams'
               - type: 'null'
+          description: >-
+            The scoring functions to use for the scoring.
         save_results_dataset:
           type: boolean
+          description: >-
+            Whether to save the results to a dataset.
       additionalProperties: false
       required:
         - dataset_id
@@ -8504,8 +8872,10 @@ components:
       properties:
         job_uuid:
           type: string
+          description: The UUID of the job to create.
         training_config:
           $ref: '#/components/schemas/TrainingConfig'
+          description: The training configuration.
         hyperparam_search_config:
           type: object
           additionalProperties:
@@ -8516,6 +8886,7 @@ components:
               - type: string
               - type: array
               - type: object
+          description: The hyperparam search configuration.
         logger_config:
           type: object
           additionalProperties:
@@ -8526,12 +8897,16 @@ components:
               - type: string
               - type: array
               - type: object
+          description: The logger configuration.
         model:
           type: string
+          description: The model to fine-tune.
         checkpoint_dir:
           type: string
+          description: The directory to save checkpoint(s) to.
         algorithm_config:
           $ref: '#/components/schemas/AlgorithmConfig'
+          description: The algorithm configuration.
       additionalProperties: false
       required:
         - job_uuid

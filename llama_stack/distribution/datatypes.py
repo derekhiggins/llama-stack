@@ -5,9 +5,10 @@
 # the root directory of this source tree.
 
 from enum import Enum
+from pathlib import Path
 from typing import Annotated, Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from llama_stack.apis.benchmarks import Benchmark, BenchmarkInput
 from llama_stack.apis.datasetio import DatasetIO
@@ -24,7 +25,7 @@ from llama_stack.apis.tools import Tool, ToolGroup, ToolGroupInput, ToolRuntime
 from llama_stack.apis.vector_dbs import VectorDB, VectorDBInput
 from llama_stack.apis.vector_io import VectorIO
 from llama_stack.providers.datatypes import Api, ProviderSpec
-from llama_stack.providers.utils.kvstore.config import KVStoreConfig
+from llama_stack.providers.utils.kvstore.config import KVStoreConfig, SqliteKVStoreConfig
 
 LLAMA_STACK_BUILD_CONFIG_VERSION = "2"
 LLAMA_STACK_RUN_CONFIG_VERSION = "2"
@@ -219,19 +220,32 @@ class LoggingConfig(BaseModel):
 class AuthProviderType(str, Enum):
     """Supported authentication provider types."""
 
-    KUBERNETES = "kubernetes"
+    OAUTH2_TOKEN = "oauth2_token"
     CUSTOM = "custom"
 
 
 class AuthenticationConfig(BaseModel):
     provider_type: AuthProviderType = Field(
         ...,
-        description="Type of authentication provider (e.g., 'kubernetes', 'custom')",
+        description="Type of authentication provider",
     )
-    config: dict[str, str] = Field(
+    config: dict[str, Any] = Field(
         ...,
         description="Provider-specific configuration",
     )
+
+
+class QuotaPeriod(str, Enum):
+    DAY = "day"
+
+
+class QuotaConfig(BaseModel):
+    kvstore: SqliteKVStoreConfig = Field(description="Config for KV store backend (SQLite only for now)")
+    anonymous_max_requests: int = Field(default=100, description="Max requests for unauthenticated clients per period")
+    authenticated_max_requests: int = Field(
+        default=1000, description="Max requests for authenticated clients per period"
+    )
+    period: QuotaPeriod = Field(default=QuotaPeriod.DAY, description="Quota period to set")
 
 
 class ServerConfig(BaseModel):
@@ -257,9 +271,13 @@ class ServerConfig(BaseModel):
         default=None,
         description="Authentication configuration for the server",
     )
-    disable_ipv6: bool = Field(
-        default=False,
-        description="Disable IPv6 support",
+    host: str | None = Field(
+        default=None,
+        description="The host the server should listen on",
+    )
+    quota: QuotaConfig | None = Field(
+        default=None,
+        description="Per client quota request configuration",
     )
 
 
@@ -312,10 +330,19 @@ a default SQLite store will be used.""",
         description="Configuration for the HTTP(S) server",
     )
 
-    external_providers_dir: str | None = Field(
+    external_providers_dir: Path | None = Field(
         default=None,
         description="Path to directory containing external provider implementations. The providers code and dependencies must be installed on the system.",
     )
+
+    @field_validator("external_providers_dir")
+    @classmethod
+    def validate_external_providers_dir(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            return Path(v)
+        return v
 
 
 class BuildConfig(BaseModel):
@@ -330,8 +357,17 @@ class BuildConfig(BaseModel):
         default=None,
         description="Name of the distribution to build",
     )
-    external_providers_dir: str | None = Field(
+    external_providers_dir: Path | None = Field(
         default=None,
         description="Path to directory containing external provider implementations. The providers packages will be resolved from this directory. "
         "pip_packages MUST contain the provider package name.",
     )
+
+    @field_validator("external_providers_dir")
+    @classmethod
+    def validate_external_providers_dir(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            return Path(v)
+        return v
