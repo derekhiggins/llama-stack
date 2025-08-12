@@ -71,6 +71,7 @@ runs:
       shell: bash
       run: |
         sudo docker logs ollama > ollama-${{ inputs.inference-mode }}.log || true
+        sudo docker logs vllm > vllm-${{ inputs.inference-mode }}.log || true
 
     - name: Upload logs
       if: ${{ always() }}

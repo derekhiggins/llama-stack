@@ -1,0 +1,87 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "http://localhost:8000/v1/v1/completions",
+    "headers": {},
+    "body": {
+      "model": "meta-llama/Llama-3.2-1B-Instruct",
+      "prompt": "<|begin_of_text|>Complete the sentence: Micheael Jordan is born in ",
+      "logprobs": 1,
+      "stream": false,
+      "temperature": 0.0,
+      "max_tokens": 5
+    },
+    "endpoint": "/v1/completions",
+    "model": "meta-llama/Llama-3.2-1B-Instruct"
+  },
+  "response": {
+    "body": {
+      "__type__": "openai.types.completion.Completion",
+      "__data__": {
+        "id": "cmpl-462bcb1a9b7c4bc28044a8c9340715c4",
+        "choices": [
+          {
+            "finish_reason": "length",
+            "index": 0,
+            "logprobs": {
+              "text_offset": [
+                0,
+                3,
+                4,
+                6,
+                7
+              ],
+              "token_logprobs": [
+                -1.7674429416656494,
+                -0.02290319837629795,
+                -1.6314351558685303,
+                -1.417293667793274,
+                -0.1325405389070511
+              ],
+              "tokens": [
+                "196",
+                "3",
+                ".\n",
+                "A",
+                ")"
+              ],
+              "top_logprobs": [
+                {
+                  "196": -1.7674429416656494
+                },
+                {
+                  "3": -0.02290319837629795
+                },
+                {
+                  ".\n": -1.6314351558685303
+                },
+                {
+                  "A": -1.417293667793274
+                },
+                {
+                  ")": -0.1325405389070511
+                }
+              ]
+            },
+            "text": "1963.\nA)",
+            "stop_reason": null,
+            "prompt_logprobs": null
+          }
+        ],
+        "created": 1755017627,
+        "model": "meta-llama/Llama-3.2-1B-Instruct",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 5,
+          "prompt_tokens": 13,
+          "total_tokens": 18,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "kv_transfer_params": null
+      }
+    },
+    "is_streaming": false
+  }
+}

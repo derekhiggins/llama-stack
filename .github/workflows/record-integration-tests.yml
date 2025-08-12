@@ -31,6 +31,9 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 're-record-tests') ||
       contains(github.event.pull_request.labels.*.name, 're-record-vision-tests')
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        provider: [ollama, vllm]
     outputs:
       test-types: ${{ steps.generate-test-types.outputs.test-types }}
       matrix-modes: ${{ steps.generate-test-types.outputs.matrix-modes }}
@@ -42,17 +45,21 @@ jobs:
       - name: Generate test types
         id: generate-test-types
         run: |
-          # Get test directories dynamically, excluding non-test directories
-          TEST_TYPES=$(find tests/integration -maxdepth 1 -mindepth 1 -type d -printf "%f\n" |
-            grep -Ev "^(__pycache__|fixtures|test_cases|recordings|post_training)$" |
-            sort | jq -R -s -c 'split("\n")[:-1]')
-          echo "test-types=$TEST_TYPES" >> $GITHUB_OUTPUT
+          if [ ${{ matrix.provider }} == "vllm" ]; then
+            echo "test-types=[\"inference\"]" >> $GITHUB_OUTPUT
+          elif
+            # Get test directories dynamically, excluding non-test directories
+            TEST_TYPES=$(find tests/integration -maxdepth 1 -mindepth 1 -type d -printf "%f\n" |
+              grep -Ev "^(__pycache__|fixtures|test_cases|recordings|post_training)$" |
+              sort | jq -R -s -c 'split("\n")[:-1]')
+            echo "test-types=$TEST_TYPES" >> $GITHUB_OUTPUT
+          fi
 
           labels=$(gh pr view ${{ github.event.pull_request.number }} --json labels --jq '.labels[].name')
           echo "labels=$labels"
 
           modes_array=()
-          if [[ $labels == *"re-record-vision-tests"* ]]; then
+          if [[ $labels == *"re-record-vision-tests"* ]] && [[ ${{ matrix.provider }} == "ollama" ]]; then
             modes_array+=("vision")
           fi
           if [[ $labels == *"re-record-tests"* ]]; then
