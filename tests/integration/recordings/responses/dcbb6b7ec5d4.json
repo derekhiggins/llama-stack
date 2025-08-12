@@ -1,0 +1,197 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "http://localhost:8000/v1/v1/completions",
+    "headers": {},
+    "body": {
+      "model": "meta-llama/Llama-3.2-1B-Instruct",
+      "prompt": "<|begin_of_text|>Complete the sentence: Micheael Jordan is born in ",
+      "logprobs": 1,
+      "stream": true,
+      "temperature": 0.0,
+      "max_tokens": 5
+    },
+    "endpoint": "/v1/completions",
+    "model": "meta-llama/Llama-3.2-1B-Instruct"
+  },
+  "response": {
+    "body": [
+      {
+        "__type__": "openai.types.completion.Completion",
+        "__data__": {
+          "id": "cmpl-941d082a51b246978b7faedf9328c76b",
+          "choices": [
+            {
+              "finish_reason": null,
+              "index": 0,
+              "logprobs": {
+                "text_offset": [
+                  0
+                ],
+                "token_logprobs": [
+                  -1.7674429416656494
+                ],
+                "tokens": [
+                  "196"
+                ],
+                "top_logprobs": [
+                  {
+                    "196": -1.7674429416656494
+                  }
+                ]
+              },
+              "text": "196",
+              "stop_reason": null
+            }
+          ],
+          "created": 1755017628,
+          "model": "meta-llama/Llama-3.2-1B-Instruct",
+          "object": "text_completion",
+          "system_fingerprint": null,
+          "usage": null
+        }
+      },
+      {
+        "__type__": "openai.types.completion.Completion",
+        "__data__": {
+          "id": "cmpl-941d082a51b246978b7faedf9328c76b",
+          "choices": [
+            {
+              "finish_reason": null,
+              "index": 0,
+              "logprobs": {
+                "text_offset": [
+                  3
+                ],
+                "token_logprobs": [
+                  -0.02290319837629795
+                ],
+                "tokens": [
+                  "3"
+                ],
+                "top_logprobs": [
+                  {
+                    "3": -0.02290319837629795
+                  }
+                ]
+              },
+              "text": "3",
+              "stop_reason": null
+            }
+          ],
+          "created": 1755017628,
+          "model": "meta-llama/Llama-3.2-1B-Instruct",
+          "object": "text_completion",
+          "system_fingerprint": null,
+          "usage": null
+        }
+      },
+      {
+        "__type__": "openai.types.completion.Completion",
+        "__data__": {
+          "id": "cmpl-941d082a51b246978b7faedf9328c76b",
+          "choices": [
+            {
+              "finish_reason": null,
+              "index": 0,
+              "logprobs": {
+                "text_offset": [
+                  4
+                ],
+                "token_logprobs": [
+                  -1.6314351558685303
+                ],
+                "tokens": [
+                  ".\n"
+                ],
+                "top_logprobs": [
+                  {
+                    ".\n": -1.6314351558685303
+                  }
+                ]
+              },
+              "text": ".\n",
+              "stop_reason": null
+            }
+          ],
+          "created": 1755017628,
+          "model": "meta-llama/Llama-3.2-1B-Instruct",
+          "object": "text_completion",
+          "system_fingerprint": null,
+          "usage": null
+        }
+      },
+      {
+        "__type__": "openai.types.completion.Completion",
+        "__data__": {
+          "id": "cmpl-941d082a51b246978b7faedf9328c76b",
+          "choices": [
+            {
+              "finish_reason": null,
+              "index": 0,
+              "logprobs": {
+                "text_offset": [
+                  6
+                ],
+                "token_logprobs": [
+                  -1.417293667793274
+                ],
+                "tokens": [
+                  "A"
+                ],
+                "top_logprobs": [
+                  {
+                    "A": -1.417293667793274
+                  }
+                ]
+              },
+              "text": "A",
+              "stop_reason": null
+            }
+          ],
+          "created": 1755017628,
+          "model": "meta-llama/Llama-3.2-1B-Instruct",
+          "object": "text_completion",
+          "system_fingerprint": null,
+          "usage": null
+        }
+      },
+      {
+        "__type__": "openai.types.completion.Completion",
+        "__data__": {
+          "id": "cmpl-941d082a51b246978b7faedf9328c76b",
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": {
+                "text_offset": [
+                  7
+                ],
+                "token_logprobs": [
+                  -0.1325405389070511
+                ],
+                "tokens": [
+                  ")"
+                ],
+                "top_logprobs": [
+                  {
+                    ")": -0.1325405389070511
+                  }
+                ]
+              },
+              "text": ")",
+              "stop_reason": null
+            }
+          ],
+          "created": 1755017628,
+          "model": "meta-llama/Llama-3.2-1B-Instruct",
+          "object": "text_completion",
+          "system_fingerprint": null,
+          "usage": null
+        }
+      }
+    ],
+    "is_streaming": true
+  }
+}
