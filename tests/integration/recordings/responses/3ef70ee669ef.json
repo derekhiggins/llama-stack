@@ -22,7 +22,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -37,7 +37,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -48,7 +48,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -63,7 +63,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -74,7 +74,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -89,7 +89,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -100,7 +100,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -115,7 +115,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -126,7 +126,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -141,7 +141,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -152,7 +152,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -167,7 +167,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -178,7 +178,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -193,7 +193,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -204,7 +204,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -219,7 +219,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -230,7 +230,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -245,7 +245,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -256,7 +256,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -271,7 +271,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -282,7 +282,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -297,7 +297,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -308,7 +308,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -323,7 +323,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -334,7 +334,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -349,7 +349,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -360,7 +360,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -375,7 +375,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -386,7 +386,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -401,7 +401,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -412,11 +412,11 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
-                "content": " \"",
+                "content": " Sol",
                 "function_call": null,
                 "refusal": null,
                 "role": null,
@@ -427,7 +427,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -438,7 +438,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -453,7 +453,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -464,11 +464,11 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
-                "content": "Sol",
+                "content": ".",
                 "function_call": null,
                 "refusal": null,
                 "role": null,
@@ -479,7 +479,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -490,7 +490,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -505,7 +505,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -516,22 +516,23 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
-                "content": "\".",
+                "content": "",
                 "function_call": null,
                 "refusal": null,
                 "role": null,
                 "tool_calls": null
               },
-              "finish_reason": null,
+              "finish_reason": "stop",
               "index": 0,
-              "logprobs": null
+              "logprobs": null,
+              "stop_reason": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -542,7 +543,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -557,7 +558,7 @@
               "logprobs": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
@@ -568,34 +569,7 @@
       {
         "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
         "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
-          "choices": [
-            {
-              "delta": {
-                "content": "",
-                "function_call": null,
-                "refusal": null,
-                "role": null,
-                "tool_calls": null
-              },
-              "finish_reason": "stop",
-              "index": 0,
-              "logprobs": null,
-              "stop_reason": null
-            }
-          ],
-          "created": 1755017528,
-          "model": "meta-llama/Llama-3.2-1B-Instruct",
-          "object": "chat.completion.chunk",
-          "service_tier": null,
-          "system_fingerprint": null,
-          "usage": null
-        }
-      },
-      {
-        "__type__": "openai.types.chat.chat_completion_chunk.ChatCompletionChunk",
-        "__data__": {
-          "id": "chatcmpl-05897b821866450eb0bccff9791c9da3",
+          "id": "chatcmpl-5e1e3419888443fbb6d633adc7efb6ee",
           "choices": [
             {
               "delta": {
@@ -611,7 +585,7 @@
               "stop_reason": null
             }
           ],
-          "created": 1755017528,
+          "created": 1755085369,
           "model": "meta-llama/Llama-3.2-1B-Instruct",
           "object": "chat.completion.chunk",
           "service_tier": null,
