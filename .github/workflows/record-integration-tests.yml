@@ -59,6 +59,12 @@ jobs:
           suite: ${{ inputs.suite }}
           inference-mode: 'record'
 
+      - name: Setup tmate session
+        if: ${{ always() }}
+        uses: mxschmitt/action-tmate@v3
+        with:
+          detached: true
+
       - name: Run and record tests
         uses: ./.github/actions/run-and-record-tests
         env:
@@ -71,3 +77,11 @@ jobs:
           suite: ${{ inputs.suite }}
           subdirs: ${{ inputs.subdirs }}
           pattern: ${{ inputs.pattern }}
+
+      - name: Wait for debug session
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          echo "Sleeping to keep runner alive for tmate session..."
+          sleep 7200
+
