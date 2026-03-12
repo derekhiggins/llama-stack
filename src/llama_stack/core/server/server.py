@@ -111,15 +111,7 @@ class StackApp(FastAPI):
     def __init__(self, config: StackConfig, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.stack: Stack = Stack(config)
-
-        # This code is called from a running event loop managed by uvicorn so we cannot simply call
-        # asyncio.run() to initialize the stack. We cannot await either since this is not an async
-        # function.
-        # As a workaround, we use a thread pool executor to run the initialize() method
-        # in a separate thread.
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            future = executor.submit(asyncio.run, self.stack.initialize())
-            future.result()
+        # Stack initialization now happens in lifespan to avoid event loop issues
 
 
 @asynccontextmanager
@@ -128,6 +120,11 @@ async def lifespan(app: StackApp):
 
     logger.info(f"Starting up Llama Stack server (version: {server_version})")
     assert app.stack is not None
+
+    # Initialize stack in the lifespan so it runs in uvicorn's event loop
+    # This fixes: RuntimeError: Task got Future attached to a different loop
+    await app.stack.initialize()
+
     app.stack.create_registry_refresh_task()
     yield
     logger.info("Shutting down")
