@@ -15,33 +15,34 @@ from llama_stack_api import (
 
 def available_providers() -> list[ProviderSpec]:
     return [
-        InlineProviderSpec(
-            api=Api.agents,
-            provider_type="inline::builtin",
-            pip_packages=[
-                "matplotlib",
-                "fonttools>=4.60.2",
-                "pillow",
-                "pandas",
-                "scikit-learn",
-                "mcp>=1.23.0",
-            ]
-            + kvstore_dependencies(),  # TODO make this dynamic based on the kvstore config
-            module="llama_stack.providers.inline.agents.builtin",
-            config_class="llama_stack.providers.inline.agents.builtin.BuiltinAgentsImplConfig",
-            api_dependencies=[
-                Api.inference,
-                Api.vector_io,
-                Api.tool_runtime,
-                Api.tool_groups,
-                Api.conversations,
-                Api.prompts,
-                Api.files,
-                Api.connectors,
-            ],
-            optional_api_dependencies=[
-                Api.safety,
-            ],
-            description="Meta's reference implementation of an agent system that can use tools, access vector databases, and perform complex reasoning tasks.",
-        ),
+        # TEMPORARILY COMMENTED OUT TO TEST BACKWARD COMPAT VALIDATION
+        # InlineProviderSpec(
+        #     api=Api.agents,
+        #     provider_type="inline::builtin",
+        #     pip_packages=[
+        #         "matplotlib",
+        #         "fonttools>=4.60.2",
+        #         "pillow",
+        #         "pandas",
+        #         "scikit-learn",
+        #         "mcp>=1.23.0",
+        #     ]
+        #     + kvstore_dependencies(),  # TODO make this dynamic based on the kvstore config
+        #     module="llama_stack.providers.inline.agents.builtin",
+        #     config_class="llama_stack.providers.inline.agents.builtin.BuiltinAgentsImplConfig",
+        #     api_dependencies=[
+        #         Api.inference,
+        #         Api.vector_io,
+        #         Api.tool_runtime,
+        #         Api.tool_groups,
+        #         Api.conversations,
+        #         Api.prompts,
+        #         Api.files,
+        #         Api.connectors,
+        #     ],
+        #     optional_api_dependencies=[
+        #         Api.safety,
+        #     ],
+        #     description="Meta's reference implementation of an agent system that can use tools, access vector databases, and perform complex reasoning tasks.",
+        # ),
     ]
